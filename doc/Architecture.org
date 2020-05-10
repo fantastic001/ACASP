@@ -1,0 +1,68 @@
+
+* Data model
+
+** HomeAd
+
++ address
++ price
++ area
++ city
++ =room_count=
++ =collected_time=
++ =publishing_time=
++ =photo_link=
++ link
+
+
+w
+** CollectorParameters
+
++ hostname
++ port
++ endpoint
++ identifier
+
+** ExplorerParameters
+
++ hostname
++ pot
++ endpoint
++ identifier
++ parameters - dictionary where each key represents custom parameters for explorer and value represents type
+  + string
+  + number 
+
+
+* Collector  REST API
+
+| HTTP Method | Location     | Parameters            | Result         | Description                                       |
+|-------------+--------------+-----------------------+----------------+---------------------------------------------------|
+| GET         | /all         |                       | List of HomeAd | Get list of all home ads collected                |
+| GET         | /date/[date] | datetime - yyyy-mm-dd | List of HomeAd | Get list of HomeAd objects ollected on given date |
+|             |              |                       |                |                                                   |
+
+
+
+* Master node 
+
+| HTTP Method | Location                 | Parameters                              | Result                     | Description                           |
+|-------------+--------------------------+-----------------------------------------+----------------------------+---------------------------------------|
+| POST        | /collectors              | CollectorParameters                     |                            | Initialize new collector to master    |
+| GET         | /collectors              |                                         | List of CollectorPaameters |                                       |
+| GET         | /collectors/[identifier] |                                         | CollectorParameters        |                                       |
+| POST        | /explorers               | ExplorerParameters                      |                            |                                       |
+| GET         | /explorers               |                                         | List of ExplorerParameters |                                       |
+| GET         | /explorers/[identifier]  | identifier - string                     | ExplorerParameters         |                                       |
+| GET         | /data                    |                                         | List of HomeAd objects     | Get collected data from all explorers |
+| POST        | /explorers/{identifier}  | JSON with parameters for given explorer |                            | Configure given explorer              |
+
+
+
+* Explorer agent 
+
+| HTTP Method | Location     | Parameters          | Result                 | Description                                                |
+|-------------+--------------+---------------------+------------------------+------------------------------------------------------------|
+| POST        | /collectors/ | CollectorParameters |                        | Register collector which this explorer can use to get data |
+| GET         | /data        |                     | List of HomeAd objects | Get data from given explorer                               |
+
+
