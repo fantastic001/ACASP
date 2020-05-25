@@ -1,4 +1,27 @@
 
+* Agent environment
+
++ frontend
++ agent center - master node - has list of all agents
++ agents - services
+
+
+* Agent center 
+
+has three layers:
+
++ model (POJOs)
++ middleware 
+  + interface for handling all requests
+  + implementation for master
+  + implementation for non-aster
+  + singleton for data persistance which is used in above classes
+  + singleton which returns aproprirate implementation (used in api layer)
++ api - one class which has all requests mapped to methods and which determines which implementation to call
+
+
+for communicating with agents, JMS is used and publish-subscribe principle
+
 * Data model
 
 ** HomeAd
