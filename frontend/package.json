@@ -1,0 +1,39 @@
+{
+  "name": "chat-frontend",
+  "version": "1.0.0",
+  "description": "Product exchange platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [
+    "ecommerce"
+  ],
+  "author": "Stefan Nozinic",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "bootstrap": "^4.3.1",
+    "browserify": "^16.2.3",
+    "css-loader": "^3.2.0",
+    "file-loader": "^6.0.0",
+    "img-loader": "^3.0.1",
+    "postcss-loader": "^3.0.0",
+    "scss-loader": "0.0.1",
+    "svg-loader": "0.0.2",
+    "vue-beautiful-chat": "^2.3.1",
+    "vue-loader": "^15.7.0",
+    "vue-router": "^3.1.3",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.10",
+    "vue.js": "^0.3.2",
+    "vuex": "^3.1.2",
+    "webpack": "^4.34.0",
+    "webpack-cli": "^3.3.4"
+  },
+  "devDependencies": {
+    "sass": "^1.23.0-module.beta.1",
+    "sass-loader": "^8.0.0"
+  }
+}
