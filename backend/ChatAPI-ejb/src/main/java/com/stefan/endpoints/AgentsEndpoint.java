@@ -22,31 +22,47 @@ import javax.ejb.Stateless;
 import javax.ejb.EJB;
 import com.stefan.cluster.Control;
 import com.stefan.cluster.Node;
-import com.stefan.data.ACLMessage;
 
 @Stateless
 @Path("agents")
-public class MessagesEndpoint {
+public class AgentsEndpoint {
 	@Context private HttpServletRequest request;
 
 	@EJB 
 	private Control control;
 
 	@GET
-	@Path("messages")
+	@Path("classes")
 	@Produces("application/json")
 	public Message all(Message message) {
 		MessageManager.getInstance().broadcastMessage(message, UserManager.getInstance().getUsers());
 		return message;
 	}
 
-	@POST
-	@Path("messages")
+	@GET
+	@Path("running")
 	@Produces("application/json")
-	public Message all(ACLMessage message) {
+	public Message all(Message message) {
 		MessageManager.getInstance().broadcastMessage(message, UserManager.getInstance().getUsers());
 		return message;
 	}
 	
+	@PUT
+	@Path("running/{type}/{name}")
+	@Produces("application/json")
+	public Message all(@PathParam("type") String type, @PathParam("name") String name) {
+		MessageManager.getInstance().broadcastMessage(message, UserManager.getInstance().getUsers());
+		return message;
+	}
+
+
+	@DELETE
+	@Path("running/{aid}")
+	@Produces("application/json")
+	public Message all(@PathParam("aid") String aid) {
+		MessageManager.getInstance().broadcastMessage(message, UserManager.getInstance().getUsers());
+		return message;
+	}
+
 	
 }

@@ -14,6 +14,10 @@ import com.stefan.user.UserManager;
 @ServerEndpoint("/websocket/login")
 public class UserWebSocket implements LoginListener {
     private Session session;
+    // TODO agent adding 
+    // Agent deleton
+    // message events
+    // agent type update
 
     @Override
     public void userLoggedIn(User user) {
