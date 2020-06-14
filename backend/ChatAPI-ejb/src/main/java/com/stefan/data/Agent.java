@@ -7,7 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Schedule;
 
 @Stateful
-public interface Control {
+public interface Agent {
 	public AID getId();
 	public void handleMessage(ACLMessage msg);
 }

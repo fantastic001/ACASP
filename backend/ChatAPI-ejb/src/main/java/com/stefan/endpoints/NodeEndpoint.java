@@ -10,6 +10,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.servlet.http.*;
 import javax.ws.rs.core.*;
 
@@ -20,9 +22,9 @@ import javax.ejb.Stateless;
 import javax.ejb.EJB;
 import com.stefan.cluster.Control;
 import com.stefan.cluster.Node;
+import com.stefan.data.ACLMessage;
 
-import com.stefan.message.MessageManager;
-import com.stefan.data.Message;
+
 
 @Stateless
 @Path("node")
@@ -40,16 +42,6 @@ public class NodeEndpoint {
 		return "OK";
 	}
 	
-	@POST
-	@Path("messages")
-	@Produces("application/json")
-	public Message newMessage(Message msg) {
-		System.out.println("This node got message!");
-		System.out.println("From: " + msg.getFromUsername());
-		System.out.println("To: " + msg.getToUsername());
-		MessageManager.getInstance().createMessage(msg);
-		return msg;
-	}
 
 	@GET
 	@Path("")
@@ -64,5 +56,19 @@ public class NodeEndpoint {
 	public String deleteNode(@PathParam("alias") String alias) {
 		control.getControl().nodeRemoved(alias);
 		return "OK";
+	}
+
+	@GET
+	@Path("messages")
+	@Produces("application/json")
+	public Collection<ACLMessage> getMessages() {
+		return null;
+	}
+
+	@POST
+	@Path("messages")
+	@Produces("application/json")
+	public ACLMessage sendMessage(ACLMessage message) {
+		return null;
 	}
 }

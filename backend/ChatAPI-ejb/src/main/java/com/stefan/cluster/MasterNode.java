@@ -3,8 +3,8 @@ package com.stefan.cluster;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.stefan.user.UserManager;
-import com.stefan.data.User;
+import com.stefan.agent.AgentManager;
+import com.stefan.data.Agent;
 import javax.ws.rs.core.Response;
 
 import java.util.concurrent.ExecutionException;
@@ -38,18 +38,18 @@ public class MasterNode implements ControlInterface {
             current.post("/node/", node);
             node.postAsync("/nodes/", current);
         }
-        for (User user : UserManager.getInstance().getUsers()) {
-            node.postAsync("/users/register/", user);
+        for (Agent agent : AgentManager.getInstance().getAgents()) {
+            node.postAsync("/agents/register/", agent);
         }
-        node.postAsync("/users/loggedIn", UserManager.getInstance().getOnlineUsers());
+        node.postAsync("/agents/loggedIn", AgentManager.getInstance().getOnlineAgents());
         
         nodes.add(node);
        
     }
 
     @Override
-    public Collection<User> getAllUsers() {
-        return UserManager.getInstance().getUsers();
+    public Collection<Agent> getAllAgents() {
+        return AgentManager.getInstance().getAgents();
     }
     @Override
     public void nodeRemoved(String alias) {
@@ -108,18 +108,7 @@ public class MasterNode implements ControlInterface {
     }
 
     @Override
-    public boolean hasUser(User u) {
-        User user = null;
-        for (User usr : UserManager.getInstance().getUsers()) {
-            if (usr.getUsername().equals(u.getUsername())) user = usr;
-        }
-        if (user == null) return false;
-        if (user.getHostAlias() == null) return true; // legacy
-        return user.getHostAlias().equals("") || user.getHostAlias().equals("master");
-    }
-
-    @Override
-    public void setUsers(Collection<User> users) {
+    public void setAgents(Collection<Agent> agents) {
         
     }
 
@@ -132,19 +121,17 @@ public class MasterNode implements ControlInterface {
         return null;
     }
 
+
     @Override
-    public void login(Collection<User> users) {
-        for (Node node : nodes) {
-            node.postAsync("/users/loggedIn/", users);
-        }
+    public Collection<Agent> getRunningAgents() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
-    public void register(User user) {
-        if (user.getHostAlias() != null) return;
-        user.setHostAlias("master");
-        for (Node node : nodes) {
-            node.postAsync("/users/register/", user);
-        }
+    public void runAgent(Agent user) {
+        // TODO Auto-generated method stub
+
     }
+
 }

@@ -7,12 +7,12 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import com.stefan.data.User; 
-import com.stefan.user.LoginListener;
-import com.stefan.user.UserManager;
+import com.stefan.agent.LoginListener;
+import com.stefan.agent.AgentManager;
+import com.stefan.data.Agent;
 
 @ServerEndpoint("/websocket/login")
-public class UserWebSocket implements LoginListener {
+public class AgentWebSocket implements LoginListener {
     private Session session;
     // TODO agent adding 
     // Agent deleton
@@ -20,12 +20,12 @@ public class UserWebSocket implements LoginListener {
     // agent type update
 
     @Override
-    public void userLoggedIn(User user) {
-        session.getAsyncRemote().sendText("LOGIN " + user.getUsername());
+    public void agentLoggedIn(Agent agent) {
+        session.getAsyncRemote().sendText("LOGIN " + agent.getId());
     }
     @Override
-    public void userLoggedOut(User user) {
-        session.getAsyncRemote().sendText("LOGOUT " + user.getUsername());
+    public void agentLoggedOut(Agent agent) {
+        // session.getAsyncRemote().sendText("LOGOUT " + user.getUsername());
     }
     
     @OnMessage
@@ -38,7 +38,7 @@ public class UserWebSocket implements LoginListener {
     public void onOpen(Session session) {
         this.session = session;
         System.out.println("WebSocket opened: " + session.getId());
-        UserManager.getInstance().addLoginListener(this);
+        AgentManager.getInstance().addLoginListener(this);
     }
 
     @OnClose

@@ -20,8 +20,12 @@ import java.util.Collection;
 
 import javax.ejb.Stateless;
 import javax.ejb.EJB;
+
+import com.stefan.agent.AgentManager;
 import com.stefan.cluster.Control;
 import com.stefan.cluster.Node;
+import com.stefan.data.Agent;
+import com.stefan.data.AgentType;
 
 @Stateless
 @Path("agents")
@@ -34,34 +38,30 @@ public class AgentsEndpoint {
 	@GET
 	@Path("classes")
 	@Produces("application/json")
-	public Message all(Message message) {
-		MessageManager.getInstance().broadcastMessage(message, UserManager.getInstance().getUsers());
-		return message;
+	public Collection<AgentType> getAllTypes() {
+		return null;
 	}
 
 	@GET
 	@Path("running")
 	@Produces("application/json")
-	public Message all(Message message) {
-		MessageManager.getInstance().broadcastMessage(message, UserManager.getInstance().getUsers());
-		return message;
+	public Collection<Agent> getAllRunningAgents() {
+		return AgentManager.getInstance().getOnlineAgents();
 	}
 	
 	@PUT
 	@Path("running/{type}/{name}")
 	@Produces("application/json")
-	public Message all(@PathParam("type") String type, @PathParam("name") String name) {
-		MessageManager.getInstance().broadcastMessage(message, UserManager.getInstance().getUsers());
-		return message;
+	public Agent runAgent(@PathParam("type") String type, @PathParam("name") String name) {
+		return null;
 	}
 
 
 	@DELETE
 	@Path("running/{aid}")
 	@Produces("application/json")
-	public Message all(@PathParam("aid") String aid) {
-		MessageManager.getInstance().broadcastMessage(message, UserManager.getInstance().getUsers());
-		return message;
+	public Agent stopAgent(@PathParam("aid") String aid) {
+		return null;
 	}
 
 	
