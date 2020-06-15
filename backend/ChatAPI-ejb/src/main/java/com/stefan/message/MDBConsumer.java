@@ -16,21 +16,11 @@ import com.stefan.data.ACLMessage;
 import com.stefan.data.AID;
 import com.stefan.data.Agent;
 
-/**
- * Central hub for all ACL messages which are sent inside Siebog. Every ACL message is first placed inside the 
- * jms/queue/siebog queue, which in turn fires the onMessage method of this class.
- * 
- * @author Minja
- *
- */
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "destination", propertyValue = "jms/queue/stefan")
 })
 public class MDBConsumer implements MessageListener {
-
-	@EJB
-	private AgentManager agm;
 
 	@Override
 	public void onMessage(Message msg) {
@@ -53,7 +43,7 @@ public class MDBConsumer implements MessageListener {
 	}
 
 	private void deliverMessage(ACLMessage msg, AID aid) {
-		Optional<Agent> agent = agm.getOnlineAgents().stream().filter(a -> a.getId().equals((aid))).findFirst();
+		Optional<Agent> agent = AgentManager.getInstance().getOnlineAgents().stream().filter(a -> a.getId().equals((aid))).findFirst();
 		if (agent.isPresent()) {
 			agent.get().handleMessage(msg);
 		} else {
