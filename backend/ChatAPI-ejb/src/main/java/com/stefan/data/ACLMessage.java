@@ -1,13 +1,19 @@
 package com.stefan.data;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class ACLMessage {
+public class ACLMessage implements Serializable {
 	
 	
-	private Performative performative; 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Performative performative;
 	
 	private AID sender; 
 	
