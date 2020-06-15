@@ -28,5 +28,6 @@ docker run --rm \
     -e masterHostname="http://api.atchat:8080/ChatAPI-web/rest" \
     -v "$TARGET_PATH-worker-$NODE_ID":/opt/jboss/wildfly/standalone/deployments/ \
     -p $NODE_BIND_PORT:8080 \
+    -v $THIS_DIR/standalone-full-ha.xml:/opt/jboss/wildfly/standalone/configuration/standalone-full-ha.xml \
     -it \
     jboss/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
