@@ -1,11 +1,18 @@
 package com.stefan.data;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class AID {
+public class AID implements Serializable{
 	
-	
-	private String name; 
+
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String name;
 	
 	private String hostAlias; 
 	

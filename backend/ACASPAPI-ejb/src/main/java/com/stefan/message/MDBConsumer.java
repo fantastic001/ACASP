@@ -15,6 +15,7 @@ import com.stefan.agent.AgentManager;
 import com.stefan.data.ACLMessage;
 import com.stefan.data.AID;
 import com.stefan.data.Agent;
+import com.stefan.data.RunningAgent;
 
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
@@ -43,9 +44,10 @@ public class MDBConsumer implements MessageListener {
 	}
 
 	private void deliverMessage(ACLMessage msg, AID aid) {
-		Optional<Agent> agent = AgentManager.getInstance().getOnlineAgents().stream().filter(a -> a.getId().getName().equals((aid.getName()))).findFirst();
+		Optional<RunningAgent> agent = AgentManager.getInstance().getOnlineAgents().stream().filter(a -> a.getAgent().getId().getType().getFullName().equals((aid.getType().getFullName()))).findFirst();
 		if (agent.isPresent()) {
-			agent.get().handleMessage(msg);
+			System.out.println("Agent found: " + agent.get().getName());
+			agent.get().getAgent().handleMessage(msg);
 		} else {
 			System.out.println("No such agent: " + aid.getName());
 		}

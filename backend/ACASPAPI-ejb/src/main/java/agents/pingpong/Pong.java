@@ -29,7 +29,7 @@ public class Pong implements Agent {
     public void construct() {
         try {
             AgentManager.getInstance().registerAgent(this);
-            AgentManager.getInstance().login(this);
+            // AgentManager.getInstance().login(this);
             System.out.println("Waiting 10 secs for ping agents to start and register");
             try {
                 Thread.sleep(10000);
@@ -38,9 +38,6 @@ public class Pong implements Agent {
             }
         }
         catch (AgentExistsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (AgentRunErrorException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

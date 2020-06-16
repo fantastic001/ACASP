@@ -33,6 +33,7 @@ import com.stefan.cluster.Control;
 import com.stefan.cluster.Node;
 import com.stefan.data.Agent;
 import com.stefan.data.AgentType;
+import com.stefan.data.RunningAgent;
 
 @Stateless
 @Path("agents")
@@ -54,7 +55,7 @@ public class AgentsEndpoint {
 	@GET
 	@Path("running")
 	@Produces("application/json")
-	public Collection<Agent> getAllRunningAgents() {
+	public Collection<RunningAgent> getAllRunningAgents() {
 		return AgentManager.getInstance().getOnlineAgents();
 	}
 
@@ -63,7 +64,7 @@ public class AgentsEndpoint {
 	@Produces("application/json")
 	public Agent runAgent(@PathParam("type") String type, @PathParam("name") String name) {
 		Optional<Agent> agent = AgentManager.getInstance().getAgents().stream().filter(
-				agent_ -> agent_.getId().getName().equals(name) && agent_.getId().getType().toString().equals(type))
+				agent_ -> agent_.getId().getType().getName().equals(name) && agent_.getId().getType().getModule().equals(type))
 				.findFirst();
 		if (agent.isPresent()) {
 			System.out.println("Running agent " + name);
@@ -87,11 +88,11 @@ public class AgentsEndpoint {
 	@DELETE
 	@Path("running/{name}")
 	@Produces("application/json")
-	public Agent stopAgent(@PathParam("name") String name) {
-		Optional<Agent> agent = AgentManager.getInstance().getOnlineAgents().stream()
-			.filter(a -> a.getId().getName().equals(name)).findFirst();
+	public RunningAgent stopAgent(@PathParam("name") String name) {
+		Optional<RunningAgent> agent = AgentManager.getInstance().getOnlineAgents().stream()
+			.filter(a -> a.getName().equals(name)).findFirst();
 		if (agent.isPresent()) {
-			AgentManager.getInstance().logout(agent.get());
+			AgentManager.getInstance().logout(agent.get().getAgent());
 		}
 		else {
 			System.out.println("Specified agent not running with given name: " + name);

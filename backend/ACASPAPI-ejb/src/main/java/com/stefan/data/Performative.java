@@ -1,5 +1,7 @@
 package com.stefan.data;
 
-public enum Performative {
+import java.io.Serializable;
 
+public enum Performative {
+    DEFAULT
 }

@@ -32,15 +32,12 @@ public class Ping implements Agent {
     public void construct() {
         try {
             AgentManager.getInstance().registerAgent(this);
-            AgentManager.getInstance().login(this);
+            // AgentManager.getInstance().login(this);
         }
         catch (AgentExistsException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (AgentRunErrorException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        } 
     }
 
     @Override
@@ -50,6 +47,7 @@ public class Ping implements Agent {
 
     @Override
     public void handleMessage(ACLMessage msg) {
+        System.out.println("Getting message");
         if (msg.getContent().equals("PONG")) {
             System.out.println("Received reply");
         }
@@ -61,15 +59,8 @@ public class Ping implements Agent {
     @Override
     public void handleStart() {
         List<AID> pongAgents = AgentManager.getInstance()
-            .getOnlineAgents().stream()
-            .filter(agent -> agent.getId().getType().getModule().equals("agents.stefan.pingpong"))
-            .map(agent -> agent.getId())
+            .getOnlineAgents().stream().map(a -> a.getAgent().getId())
             .collect(Collectors.toList());
-        try {
-            Thread.sleep(20000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         System.out.println("Sending message to pong agents");
         mmgr.post(new ACLMessage(null, getId(), pongAgents, null, "PING", null, null, null, null, null, null, null, null, null, null));
     }

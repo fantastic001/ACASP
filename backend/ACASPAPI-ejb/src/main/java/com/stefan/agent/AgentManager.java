@@ -1,6 +1,7 @@
 package com.stefan.agent;
 
 import com.stefan.data.Agent;
+import com.stefan.data.RunningAgent;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -22,7 +23,7 @@ import javax.ws.rs.core.GenericType;
 public class AgentManager {
     private ArrayList<Agent> agents;
     private ArrayList<LoginListener> loginListeners;
-    private ArrayList<Agent> online;
+    private ArrayList<RunningAgent> online;
     private static AgentManager instance = null;
 
     private AgentManager() {
@@ -90,10 +91,10 @@ public class AgentManager {
               && currentAgent.getId().getType().getModule().equals(agent.getId().getType().getModule())
             ) {
                 System.out.println(">>> " + currentAgent.getId().getType().getFullName());
-                online.add(agent);
                 String pkg = agent.getId().getType().getModule() + "." + agent.getId().getType().getName();
-                agent.getId().setName(pkg + "_" + getRandomAgentName());
-                System.out.println("Starting agent " + pkg);
+                String name = pkg + "_" + getRandomAgentName();
+                System.out.println("Starting agent " + pkg + " with name " + name);
+                online.add(new RunningAgent(name, agent));
                 agent.handleStart();
                 return;
             }
@@ -115,7 +116,7 @@ public class AgentManager {
 	}
 
     public void logout(Agent agent) {
-        Agent found = null;
+        RunningAgent found = null;
         for (Agent currentAgent : this.agents) {
             if (agent.getId().equals(currentAgent.getId())) {
                 for (LoginListener listener : this.loginListeners) {
@@ -123,8 +124,8 @@ public class AgentManager {
                 }
                 agent.handleStop();
                 // remove it from logged agents 
-                for (Agent u : online) {
-                    if (u.getId().equals(agent.getId())) {
+                for (RunningAgent u : online) {
+                    if (u.getAgent().getId().equals(agent.getId())) {
                         found = u;
                     }
                 }
@@ -133,7 +134,7 @@ public class AgentManager {
         if (found != null) online.remove(found);
     }
 
-    public Collection<Agent> getOnlineAgents() {
+    public Collection<RunningAgent> getOnlineAgents() {
         return this.online;
     }
     public void addLoginListener(LoginListener listener) {
