@@ -29,6 +29,7 @@ public class Pong implements Agent {
     public void construct() {
         try {
             AgentManager.getInstance().registerAgent(this);
+            AgentManager.getInstance().registerAgent(new Ping());
             AgentManager.getInstance().login(this);
             System.out.println("Starting all ping agents");
             AgentManager.getInstance().getAgents().stream()

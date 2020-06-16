@@ -16,6 +16,7 @@ import java.util.ServiceLoader;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.swing.ListCellRenderer;
+import javax.ws.rs.core.GenericType;
 
 @Stateless
 public class AgentManager {
@@ -72,30 +73,25 @@ public class AgentManager {
 
     public void registerAgent(Agent agent) throws AgentExistsException {
         for (Agent u : this.agents) {
-            if (u.getId().equals(agent.getId())) throw new AgentExistsException();
+            String pkg = u.getId().getType().getModule() + "." + u.getId().getType().getName();
+            if (pkg.equals(agent.getId().getType().getModule() + "." + agent.getId().getType().getName())) 
+                throw new AgentExistsException();
         }
-        System.out.println("Registering agent");
+        System.out.println("Registering agent " + agent.getId().getType().getFullName());
         this.agents.add(agent);
         agent.init();
     }
 
     public void login(Agent agent) throws AgentRunErrorException {
         for (Agent currentAgent : this.agents) {
-            if (agent.getId().getName().equals(currentAgent.getId().getName())) {
-                System.out.println("Logging agent in");
-                for (LoginListener listener : this.loginListeners) {
-                    listener.agentLoggedIn(agent);
-                }
+            if (currentAgent.getId().getType().getName().equals(agent.getId().getType().getName())
+              && currentAgent.getId().getType().getModule().equals(agent.getId().getType().getModule())
+            ) {
+                online.add(agent);
+                String pkg = agent.getId().getType().getModule() + "." + agent.getId().getType().getName();
+                agent.getId().setName(pkg + "_" + getRandomAgentName());
+                System.out.println("Starting agent " + pkg);
                 agent.handleStart();
-                // if already logged in ignore it 
-                int count = 0;
-                for (Agent u : online) {
-                    if (u.getId().getName().equals(agent.getId().getName())) count++;
-                }
-                if (count == 0) {
-                    System.out.println("Adding agent to online list");
-                    online.add(agent);
-                }
                 return;
             }
         }

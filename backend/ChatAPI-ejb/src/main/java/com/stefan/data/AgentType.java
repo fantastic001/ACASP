@@ -41,5 +41,9 @@ public class AgentType {
 	{
 		this.module = newValue;
 	}
+
+	public String getFullName() {
+		return getModule() + "."+getName();
+	}
 	
 }

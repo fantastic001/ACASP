@@ -22,15 +22,6 @@ import com.stefan.message.MessageManagerBean;
 @Singleton
 public class Ping implements Agent {
 
-    @PostConstruct
-    public void construct() {
-        try {
-            AgentManager.getInstance().registerAgent(this);
-        } catch (AgentExistsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public AID getId() {

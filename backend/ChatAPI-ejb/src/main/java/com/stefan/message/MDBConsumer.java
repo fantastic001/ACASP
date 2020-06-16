@@ -1,4 +1,4 @@
-package siebog.messagemanager;
+package com.stefan.message;
 
 import java.util.Optional;
 
