@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
+import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.ejb.Stateful;
 import javax.ejb.Stateless;
@@ -24,6 +25,7 @@ import javax.ejb.DependsOn;
 @Startup
 @Singleton
 @DependsOn("MessageManagerBean")
+@LocalBean
 public class Ping implements Agent {
 
 
@@ -55,6 +57,7 @@ public class Ping implements Agent {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if (mmgr == null) System.out.println("mgr is null");
         mmgr.post(new ACLMessage(null, getId(), pongAgents, null, "PING", null, null, null, null, null, null, null, null, null, null));
     }
 
