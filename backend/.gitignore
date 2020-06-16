@@ -1,7 +1,7 @@
 target/
-ChatAPI-ear/target
-ChatAPI-ejb/target
-ChatAPI-web/target
+ACASPAPI-ear/target
+ACASPAPI-ejb/target
+ACASPAPI-web/target
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

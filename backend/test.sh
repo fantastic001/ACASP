@@ -17,9 +17,9 @@ function req() {
     data="$(for key in $keys; do echo "\"$key\""; echo "\"${json[$key]}\""; done | jq -cn 'reduce inputs as $i ({}; . + { ($i): input })')"
     # echo $data
     if [ -z "$data" ]; then 
-        curl -i -X $method -c cookies.txt -b cookies.txt -H "Content-Type: application/json" "localhost:5544/ChatAPI-web/rest$path" 
+        curl -i -X $method -c cookies.txt -b cookies.txt -H "Content-Type: application/json" "localhost:5544/ACASPAPI-web/rest$path" 
     else
-        curl -i -X $method -c cookies.txt -b cookies.txt -H "Content-Type: application/json" -d $data "localhost:5544/ChatAPI-web/rest$path" 
+        curl -i -X $method -c cookies.txt -b cookies.txt -H "Content-Type: application/json" -d $data "localhost:5544/ACASPAPI-web/rest$path" 
     fi
 }
 
@@ -39,9 +39,9 @@ function req2() {
     data="$(for key in $keys; do echo "\"$key\""; echo "\"${json[$key]}\""; done | jq -cn 'reduce inputs as $i ({}; . + { ($i): input })')"
     # echo $data
     if [ -z "$data" ]; then 
-        curl -i -X $method -c cookies2.txt -b cookies2.txt -H "Content-Type: application/json" "localhost:5546/ChatAPI-web/rest$path" 
+        curl -i -X $method -c cookies2.txt -b cookies2.txt -H "Content-Type: application/json" "localhost:5546/ACASPAPI-web/rest$path" 
     else
-        curl -i -X $method -c cookies2.txt -b cookies2.txt -H "Content-Type: application/json" -d $data "localhost:5546/ChatAPI-web/rest$path" 
+        curl -i -X $method -c cookies2.txt -b cookies2.txt -H "Content-Type: application/json" -d $data "localhost:5546/ACASPAPI-web/rest$path" 
     fi
 }
 
