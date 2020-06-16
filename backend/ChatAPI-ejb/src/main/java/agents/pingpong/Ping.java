@@ -17,9 +17,13 @@ import com.stefan.data.AID;
 import com.stefan.data.Agent;
 import com.stefan.data.AgentType;
 import com.stefan.message.MessageManagerBean;
+import javax.ejb.Local;
+import java.lang.Thread;
+import javax.ejb.DependsOn;
 
 @Startup
 @Singleton
+@DependsOn("MessageManagerBean")
 public class Ping implements Agent {
 
 
@@ -45,6 +49,12 @@ public class Ping implements Agent {
             .filter(agent -> agent.getId().getType().getModule().equals("agents.stefan.pingpong"))
             .map(agent -> agent.getId())
             .collect(Collectors.toList());
+        System.out.println("Sending message to pong agents");
+        try {
+            Thread.sleep(10000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mmgr.post(new ACLMessage(null, getId(), pongAgents, null, "PING", null, null, null, null, null, null, null, null, null, null));
     }
 

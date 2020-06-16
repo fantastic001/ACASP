@@ -12,6 +12,9 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.ejb.LocalBean;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
@@ -25,8 +28,8 @@ import com.stefan.data.ACLMessage;
 import com.stefan.data.AID;
 import com.stefan.data.Performative;
 
-@Stateless
-@Remote(MessageManager.class)
+@Startup
+@Singleton
 @LocalBean
 public class MessageManagerBean implements MessageManager {
 
@@ -36,13 +39,12 @@ public class MessageManagerBean implements MessageManager {
 	private Session session;
 	private MessageProducer defaultProducer;
 
-	@Resource
-	TimerService timerService;
-
 	@PostConstruct
 	public void postConstruct() {
+		System.out.println("invoking postconstruct");
 		session = factory.getSession();
 		defaultProducer = factory.getDefaultProducer(session);
+		System.out.println("done postconstruct");
 	}
 
 	@PreDestroy

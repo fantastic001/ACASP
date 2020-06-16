@@ -4,7 +4,9 @@ package com.stefan.message;
 import java.util.List;
 
 import com.stefan.data.ACLMessage;
+import javax.ejb.Local;
 
+@Local
 public interface MessageManager {
 	
 	List<String> getPerformatives();
