@@ -29,21 +29,15 @@ public class Pong implements Agent {
     public void construct() {
         try {
             AgentManager.getInstance().registerAgent(this);
-            AgentManager.getInstance().registerAgent(new Ping());
             AgentManager.getInstance().login(this);
-            System.out.println("Starting all ping agents");
-            AgentManager.getInstance().getAgents().stream()
-                .filter(agent -> agent.getId().getType().getName().equals("ping"))
-                .forEach(agent -> {
-                        try {
-                            AgentManager.getInstance().login(agent);
-                        } catch (AgentRunErrorException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                });
-                
-        } catch (AgentExistsException e) {
+            System.out.println("Waiting 10 secs for ping agents to start and register");
+            try {
+                Thread.sleep(10000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        catch (AgentExistsException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (AgentRunErrorException e) {

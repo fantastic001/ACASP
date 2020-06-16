@@ -71,7 +71,8 @@ public class AgentManager {
         return AgentManager.instance;
     }
 
-    public void registerAgent(Agent agent) throws AgentExistsException {
+    synchronized public void registerAgent(Agent agent) throws AgentExistsException {
+        System.out.println("Attempting to register " + agent.getId().getType().getFullName());
         for (Agent u : this.agents) {
             String pkg = u.getId().getType().getModule() + "." + u.getId().getType().getName();
             if (pkg.equals(agent.getId().getType().getModule() + "." + agent.getId().getType().getName())) 
@@ -82,11 +83,13 @@ public class AgentManager {
         agent.init();
     }
 
-    public void login(Agent agent) throws AgentRunErrorException {
+    synchronized public void login(Agent agent) throws AgentRunErrorException {
+        System.out.println("Attempting to start " + agent.getId().getType().getFullName());
         for (Agent currentAgent : this.agents) {
             if (currentAgent.getId().getType().getName().equals(agent.getId().getType().getName())
               && currentAgent.getId().getType().getModule().equals(agent.getId().getType().getModule())
             ) {
+                System.out.println(">>> " + currentAgent.getId().getType().getFullName());
                 online.add(agent);
                 String pkg = agent.getId().getType().getModule() + "." + agent.getId().getType().getName();
                 agent.getId().setName(pkg + "_" + getRandomAgentName());

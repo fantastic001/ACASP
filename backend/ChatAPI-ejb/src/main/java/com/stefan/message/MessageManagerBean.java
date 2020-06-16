@@ -75,6 +75,7 @@ public class MessageManagerBean implements MessageManager {
 			if (msg.getReceivers().get(i) == null) {
 				throw new IllegalArgumentException("AID cannot be null.");
 			}
+			System.out.println("Sending message to agent");
 			postToReceiver(msg, i, delayMillisec);
 		}
 	}

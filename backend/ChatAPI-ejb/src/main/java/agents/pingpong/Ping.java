@@ -12,6 +12,7 @@ import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 
 import com.stefan.agent.AgentExistsException;
+import com.stefan.agent.AgentRunErrorException;
 import com.stefan.agent.AgentManager;
 import com.stefan.data.ACLMessage;
 import com.stefan.data.AID;
@@ -24,10 +25,23 @@ import javax.ejb.DependsOn;
 
 @Startup
 @Singleton
-@DependsOn("MessageManagerBean")
 @LocalBean
 public class Ping implements Agent {
 
+    @PostConstruct
+    public void construct() {
+        try {
+            AgentManager.getInstance().registerAgent(this);
+            AgentManager.getInstance().login(this);
+        }
+        catch (AgentExistsException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (AgentRunErrorException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public AID getId() {
@@ -51,13 +65,12 @@ public class Ping implements Agent {
             .filter(agent -> agent.getId().getType().getModule().equals("agents.stefan.pingpong"))
             .map(agent -> agent.getId())
             .collect(Collectors.toList());
-        System.out.println("Sending message to pong agents");
         try {
-            Thread.sleep(10000);
+            Thread.sleep(20000);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (mmgr == null) System.out.println("mgr is null");
+        System.out.println("Sending message to pong agents");
         mmgr.post(new ACLMessage(null, getId(), pongAgents, null, "PING", null, null, null, null, null, null, null, null, null, null));
     }
 
