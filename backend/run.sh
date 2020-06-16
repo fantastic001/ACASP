@@ -12,5 +12,6 @@ docker run --rm \
     -p 5544:8080 \
     -p 9990:9990 \
     -v $THIS_DIR/standalone-full-ha.xml:/opt/jboss/wildfly/standalone/configuration/standalone-full-ha.xml \
+    -v $THIS_DIR/external:/opt/jboss/wildfly/standalone/lib/ext/ \
     -it \
     jboss/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 -c standalone-full-ha.xml

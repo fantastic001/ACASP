@@ -12,4 +12,17 @@
     <module>ChatAPI-web</module>
     <module>ChatAPI-ejb</module>
   </modules>
+  <dependencies>
+	        <dependency>
+
+            <groupId>org.reflections</groupId>
+
+            <artifactId>reflections</artifactId>
+
+            <version>0.9.11</version>
+
+        </dependency>
+
+
+  </dependencies>
 </project>

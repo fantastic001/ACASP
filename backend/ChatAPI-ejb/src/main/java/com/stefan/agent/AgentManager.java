@@ -10,6 +10,8 @@ import org.reflections.util.ConfigurationBuilder;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Random;
+import java.util.ServiceLoader;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -30,19 +32,31 @@ public class AgentManager {
 
     @PostConstruct
     public void agentLookup() {
-        Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forClassLoader())
-                .setScanners(new SubTypesScanner()));
-        System.err.println("Classes annotated with SampleAnnotation");
-        for (Class clss : reflections.getSubTypesOf(Agent.class)) {
-            System.out.println(clss.getName());
+        // Reflections reflections = new Reflections(new
+        // ConfigurationBuilder().setUrls(ClasspathHelper.forPackage("com.stefan.data"))
+        // .setScanners(new SubTypesScanner()));
+        // System.err.println("Classes annotated with SampleAnnotation");
+        // for (Class clss : reflections.getSubTypesOf(Agent.class)) {
+        // System.out.println(clss.getName());
+        // try {
+        // Agent agent = (Agent) clss.getConstructor().newInstance();
+        // agent.init();
+        // AgentManager.getInstance().registerAgent(agent);
+        // } catch (InstantiationException | IllegalAccessException |
+        // IllegalArgumentException
+        // | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // } catch (AgentExistsException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // }
+        // }
+        ServiceLoader<Agent> loader = ServiceLoader.load(Agent.class);
+        for (Agent agent : loader) {
             try {
-                Agent agent = (Agent) clss.getConstructor().newInstance();
-                agent.init();
+                System.out.println("Loading agent " + agent.getId().getType().getName());
                 AgentManager.getInstance().registerAgent(agent);
-            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             } catch (AgentExistsException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -62,19 +76,21 @@ public class AgentManager {
         }
         System.out.println("Registering agent");
         this.agents.add(agent);
+        agent.init();
     }
 
     public void login(Agent agent) throws AgentRunErrorException {
         for (Agent currentAgent : this.agents) {
-            if (agent.getId().equals(currentAgent.getId())) {
+            if (agent.getId().getName().equals(currentAgent.getId().getName())) {
                 System.out.println("Logging agent in");
                 for (LoginListener listener : this.loginListeners) {
                     listener.agentLoggedIn(agent);
                 }
+                agent.handleStart();
                 // if already logged in ignore it 
                 int count = 0;
                 for (Agent u : online) {
-                    if (u.getId().equals(agent.getId())) count++;
+                    if (u.getId().getName().equals(agent.getId().getName())) count++;
                 }
                 if (count == 0) {
                     System.out.println("Adding agent to online list");
@@ -85,6 +101,19 @@ public class AgentManager {
         }
         throw new AgentRunErrorException();
     }
+    private String getRandomAgentName() {
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+        for (int i = 0; i < targetStringLength; i++) {
+            int randomLimitedInt = leftLimit + (int) (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        String generatedString = buffer.toString();
+		return "Agent-" + generatedString;
+	}
 
     public void logout(Agent agent) {
         Agent found = null;
@@ -93,6 +122,7 @@ public class AgentManager {
                 for (LoginListener listener : this.loginListeners) {
                     listener.agentLoggedOut(agent);
                 }
+                agent.handleStop();
                 // remove it from logged agents 
                 for (Agent u : online) {
                     if (u.getId().equals(agent.getId())) {

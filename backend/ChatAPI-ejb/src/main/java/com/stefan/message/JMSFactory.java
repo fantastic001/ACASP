@@ -46,7 +46,7 @@ public class JMSFactory {
 	public void postConstruct() {
 		try {
 			//connection = connectionFactory.createConnection(siebog.nodemanager.Global.USERNAME, siebog.nodemanager.Global.PASSWORD);
-			connection = connectionFactory.createConnection("guest", "guest.guest.1");
+			connection = connectionFactory.createConnection();
 			connection.setClientID(getRandomId());
 			connection.start();
 		} catch (JMSException ex) {
