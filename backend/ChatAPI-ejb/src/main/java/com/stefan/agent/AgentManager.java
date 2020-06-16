@@ -2,20 +2,53 @@ package com.stefan.agent;
 
 import com.stefan.data.Agent;
 
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
 import javax.swing.ListCellRenderer;
 
+@Stateless
 public class AgentManager {
     private ArrayList<Agent> agents;
     private ArrayList<LoginListener> loginListeners;
     private ArrayList<Agent> online;
-    private static AgentManager instance = null; 
+    private static AgentManager instance = null;
+
     private AgentManager() {
         this.agents = new ArrayList<>();
         online = new ArrayList<>();
         loginListeners = new ArrayList<>();
+    }
+
+    @PostConstruct
+    public void agentLookup() {
+        Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forClassLoader())
+                .setScanners(new SubTypesScanner()));
+        System.err.println("Classes annotated with SampleAnnotation");
+        for (Class clss : reflections.getSubTypesOf(Agent.class)) {
+            System.out.println(clss.getName());
+            try {
+                Agent agent = (Agent) clss.getConstructor().newInstance();
+                agent.init();
+                AgentManager.getInstance().registerAgent(agent);
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                    | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (AgentExistsException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public static AgentManager getInstance() {
