@@ -23,6 +23,8 @@ import javax.ejb.EJB;
 import com.stefan.cluster.Control;
 import com.stefan.cluster.Node;
 import com.stefan.data.ACLMessage;
+import com.stefan.message.MessageManager;
+import com.stefan.message.MessageManagerBean;
 
 
 
@@ -65,10 +67,14 @@ public class NodeEndpoint {
 		return null;
 	}
 
+	@EJB
+	private MessageManagerBean msgmgr;
+
 	@POST
 	@Path("messages")
 	@Produces("application/json")
 	public ACLMessage sendMessage(ACLMessage message) {
-		return null;
+		msgmgr.post(message);
+		return message;
 	}
 }

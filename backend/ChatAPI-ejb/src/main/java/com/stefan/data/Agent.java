@@ -10,4 +10,8 @@ import javax.ejb.Schedule;
 public interface Agent {
 	public AID getId();
 	public void handleMessage(ACLMessage msg);
+	public void handleStart();
+	public void handleStop();
+	public void init();
+	public void deinit();
 }
