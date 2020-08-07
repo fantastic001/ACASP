@@ -2,6 +2,9 @@
 
 JS=""
 
+export URL="localhost:5544/ACASPAPI-web/rest"
+export ACL=$(cat acl_sample.json | tr -d "\n")
+
 function req() {
     method=$1
     path="$2"

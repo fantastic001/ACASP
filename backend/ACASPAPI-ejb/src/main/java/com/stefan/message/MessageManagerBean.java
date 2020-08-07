@@ -71,6 +71,7 @@ public class MessageManagerBean implements MessageManager {
 
 	@Override
 	public void post(ACLMessage msg, long delayMillisec) {
+		System.out.println("Finding agents to which send message...");
 		for (int i = 0; i < msg.getReceivers().size(); i++) {
 			if (msg.getReceivers().get(i) == null) {
 				throw new IllegalArgumentException("AID cannot be null.");

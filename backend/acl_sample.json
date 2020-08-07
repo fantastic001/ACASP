@@ -1,0 +1,17 @@
+{
+	"performative": null, 
+	"sender": null, 
+	"receivers": [], 
+	"replyTo":null, 
+	"content": "PING", 
+	"contentObj": null, 
+	"userArgs": null, 
+	"language": null, 
+	"encoding": null, 
+	"orthology": null, 
+	"protocol": null, 
+	"conversationId": null, 
+	"replyWith": null, 
+	"inReplyTo": null, 
+	"replyBy": null
+}
