@@ -84,15 +84,14 @@ public class AgentManager {
         agent.init();
     }
 
-    synchronized public void login(Agent agent) throws AgentRunErrorException {
+    synchronized public void login(String name, Agent agent) throws AgentRunErrorException {
         System.out.println("Attempting to start " + agent.getId().getType().getFullName());
         for (Agent currentAgent : this.agents) {
             if (currentAgent.getId().getType().getName().equals(agent.getId().getType().getName())
               && currentAgent.getId().getType().getModule().equals(agent.getId().getType().getModule())
             ) {
                 System.out.println(">>> " + currentAgent.getId().getType().getFullName());
-                String pkg = agent.getId().getType().getModule() + "." + agent.getId().getType().getName();
-                String name = pkg + "_" + getRandomAgentName();
+                String pkg = agent.getId().getType().getFullName();
                 System.out.println("Starting agent " + pkg + " with name " + name);
                 online.add(new RunningAgent(name, agent));
                 agent.handleStart();

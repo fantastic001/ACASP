@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import javax.annotation.Generated;
 import javax.servlet.http.*;
+import javax.validation.constraints.Positive;
 import javax.ws.rs.core.*;
 
 import java.util.Date;
@@ -64,12 +65,12 @@ public class AgentsEndpoint {
 	@Produces("application/json")
 	public Agent runAgent(@PathParam("type") String type, @PathParam("name") String name) {
 		Optional<Agent> agent = AgentManager.getInstance().getAgents().stream().filter(
-				agent_ -> agent_.getId().getType().getName().equals(name) && agent_.getId().getType().getModule().equals(type))
+				agent_ -> agent_.getId().getType().getFullName().equals(type))
 				.findFirst();
 		if (agent.isPresent()) {
 			System.out.println("Running agent " + name);
 			try {
-				AgentManager.getInstance().login(agent.get());
+				AgentManager.getInstance().login(name, agent.get());
 			} catch (AgentRunErrorException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -81,9 +82,7 @@ public class AgentsEndpoint {
 		return agent.orElse(null);
 	}
 
-
-
-
+	
 	
 	@DELETE
 	@Path("running/{name}")

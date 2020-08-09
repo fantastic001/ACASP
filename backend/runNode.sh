@@ -30,4 +30,5 @@ docker run --rm \
     -p $NODE_BIND_PORT:8080 \
     -v $THIS_DIR/standalone-full-ha.xml:/opt/jboss/wildfly/standalone/configuration/standalone-full-ha.xml \
     -it \
-    jboss/wildfly /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
+    -v $THIS_DIR/bin/:/usr/local/bin/ \
+    jboss/wildfly:18.0.1.Final /usr/local/bin/init.sh

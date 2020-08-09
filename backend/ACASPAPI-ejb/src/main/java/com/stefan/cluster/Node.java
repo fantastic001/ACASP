@@ -82,6 +82,14 @@ public class Node {
         System.out.println("Preparing request for sending to " + path);
         return target.request().async().get();
 	}
+	public <R> Future<Response> putAsync(String location) {
+		final String path = getAddress() + location; 
+        
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(UriBuilder.fromPath(path));
+        System.out.println("Preparing request for sending to " + path);
+        return target.request().async().put(null);
+	}
 	public <R> Future<Response> deleteAsync(String location) {
 		final String path = getAddress() + location; 
         

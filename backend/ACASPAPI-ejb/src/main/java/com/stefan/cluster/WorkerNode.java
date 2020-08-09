@@ -2,7 +2,10 @@ package com.stefan.cluster;
 
 import java.util.Collection;
 
+import com.stefan.agent.AgentManager;
 import com.stefan.data.Agent;
+import com.stefan.data.RunningAgent;
+
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -50,7 +53,7 @@ public class WorkerNode implements ControlInterface {
         ResourceReader reader = new ResourceReader();
         String masterHostname = reader.getProperty("masterHostname", "");
         System.out.println("Running in worker node with master: " + masterHostname);
-        final String path = masterHostname + "/register";
+        final String path = masterHostname + "/node";
 
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(UriBuilder.fromPath(path));
@@ -123,14 +126,12 @@ public class WorkerNode implements ControlInterface {
 
     @Override
     public Collection<Agent> getAllAgents() {
-        // TODO Auto-generated method stub
-        return null;
+        return AgentManager.getInstance().getAgents();
     }
 
     @Override
-    public Collection<Agent> getRunningAgents() {
-        // TODO Auto-generated method stub
-        return null;
+    public Collection<RunningAgent> getRunningAgents() {
+        return AgentManager.getInstance().getOnlineAgents();
     }
 
     @Override

@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import com.stefan.agent.AgentManager;
 import com.stefan.data.Agent;
+import com.stefan.data.RunningAgent;
+
 import javax.ws.rs.core.Response;
 
 import java.util.concurrent.ExecutionException;
@@ -38,10 +40,9 @@ public class MasterNode implements ControlInterface {
             current.post("/node/", node);
             node.postAsync("/nodes/", current);
         }
-        for (Agent agent : AgentManager.getInstance().getAgents()) {
-            node.postAsync("/agents/register/", agent);
-        }
-        node.postAsync("/agents/loggedIn", AgentManager.getInstance().getOnlineAgents());
+        // for (RunningAgent a : AgentManager.getInstance().getOnlineAgents()) {
+        //     node.putAsync("/agents/running/" + a.getAgent().getId().getType().getFullName() + "/" + a.getName());
+        // }
         
         nodes.add(node);
        
@@ -123,9 +124,8 @@ public class MasterNode implements ControlInterface {
 
 
     @Override
-    public Collection<Agent> getRunningAgents() {
-        // TODO Auto-generated method stub
-        return null;
+    public Collection<RunningAgent> getRunningAgents() {
+        return AgentManager.getInstance().getOnlineAgents();
     }
 
     @Override
