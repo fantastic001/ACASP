@@ -24,6 +24,8 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 
+import com.stefan.cluster.Control;
+import com.stefan.cluster.ControlInterface;
 import com.stefan.data.ACLMessage;
 import com.stefan.data.AID;
 import com.stefan.data.Performative;
@@ -38,6 +40,9 @@ public class MessageManagerBean implements MessageManager {
 
 	private Session session;
 	private MessageProducer defaultProducer;
+	
+	@EJB
+	private Control control;
 
 	@PostConstruct
 	public void postConstruct() {
@@ -71,13 +76,26 @@ public class MessageManagerBean implements MessageManager {
 
 	@Override
 	public void post(ACLMessage msg, long delayMillisec) {
+		if (control.getControl().postMessage(msg)) {
+			postOffline(msg);
+			System.out.println("Message sent");
+		}
+		else System.out.println("Message not sent");
+	}
+
+	@Override
+	public void postOffline(ACLMessage message) {
 		System.out.println("Finding agents to which send message...");
-		for (int i = 0; i < msg.getReceivers().size(); i++) {
-			if (msg.getReceivers().get(i) == null) {
+		System.out.println("Receivers for message:");
+		for (AID aid : message.getReceivers()) {
+			System.out.println(aid.getType().getFullName());
+		}
+		for (int i = 0; i < message.getReceivers().size(); i++) {
+			if (message.getReceivers().get(i) == null) {
 				throw new IllegalArgumentException("AID cannot be null.");
 			}
 			System.out.println("Sending message to agent");
-			postToReceiver(msg, i, delayMillisec);
+			postToReceiver(message, i, 0);
 		}
 	}
 

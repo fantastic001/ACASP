@@ -54,8 +54,9 @@ public class MessagesEndpoint {
 	@Path("")
 	@Produces("application/json")
 	public ACLMessage sendMessage(ACLMessage message) {
-        messageManager.post(message);
-        return message;
+		System.out.println("Got message from other node");
+		messageManager.post(message);
+		return message;
     }
     
     @GET

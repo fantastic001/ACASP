@@ -59,7 +59,7 @@ public class Ping implements Agent {
     @Override
     public void handleStart() {
         List<AID> pongAgents = AgentManager.getInstance()
-            .getOnlineAgents().stream().map(a -> a.getAgent().getId())
+            .getAllOnlineAgents().stream().map(a -> a.getAgent().getId())
             .collect(Collectors.toList());
         System.out.println("Sending message to pong agents");
         mmgr.post(new ACLMessage(null, getId(), pongAgents, null, "PING", null, null, null, null, null, null, null, null, null, null));

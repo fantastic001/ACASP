@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.stefan.agent.AgentManager;
+import com.stefan.data.ACLMessage;
 import com.stefan.data.Agent;
 import com.stefan.data.RunningAgent;
+import com.stefan.message.MessageManager;
 
+import javax.ejb.EJB;
 import javax.ws.rs.core.Response;
 
 import java.util.concurrent.ExecutionException;
@@ -14,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 public class MasterNode implements ControlInterface {
     
+
     private ArrayList<Node> nodes;
 
 
@@ -40,6 +44,11 @@ public class MasterNode implements ControlInterface {
             current.post("/node/", node);
             node.postAsync("/nodes/", current);
         }
+        System.out.println("Sending list of currently running agents which is:");
+        for (RunningAgent a : AgentManager.getInstance().getAllOnlineAgents()) {
+            System.out.println(a.getName());
+        }
+        node.postAsync("/agents/running/", AgentManager.getInstance().getAllOnlineAgents());
         // for (RunningAgent a : AgentManager.getInstance().getOnlineAgents()) {
         //     node.putAsync("/agents/running/" + a.getAgent().getId().getType().getFullName() + "/" + a.getName());
         // }
@@ -95,6 +104,7 @@ public class MasterNode implements ControlInterface {
                 }
             }
             catch (ExecutionException e) {
+                e.printStackTrace();
                 removal.add(node);
             }
         }
@@ -129,9 +139,26 @@ public class MasterNode implements ControlInterface {
     }
 
     @Override
-    public void runAgent(Agent user) {
-        // TODO Auto-generated method stub
-
+    public void runAgent(Agent agent) {
+        for (Node node : nodes) {
+            node.postAsync("/agents/running/", AgentManager.getInstance().getAllOnlineAgents());
+        }
     }
 
+    public boolean postMessage(ACLMessage message) {
+        System.out.println("Master node recieved message either from itself or from other nodes");
+        message.setInReplyTo("master");
+        for (Node node : nodes) {
+            node.postAsync("/messages/", message);
+        }
+        return true;
+    }
+
+    @Override
+    public void setRunningAgents(Collection<RunningAgent> agents) {
+        AgentManager.getInstance().getOnlineAgents().clear();
+        for (RunningAgent agent : agents) {
+            AgentManager.getInstance().getOnlineAgents().add(agent);
+        }
+    }
 }

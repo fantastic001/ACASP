@@ -3,13 +3,16 @@ package com.stefan.cluster;
 import java.util.Collection;
 
 import com.stefan.agent.AgentManager;
+import com.stefan.data.ACLMessage;
 import com.stefan.data.Agent;
 import com.stefan.data.RunningAgent;
+import com.stefan.message.MessageManager;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import javax.ejb.EJB;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import java.util.Random;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 public class WorkerNode implements ControlInterface {
 
     private Collection<Node> nodes;
+    
 
     private String randomNodeAlias() {
         int leftLimit = 97; // letter 'a'
@@ -141,9 +145,31 @@ public class WorkerNode implements ControlInterface {
     }
 
     @Override
-    public void runAgent(Agent user) {
-        // TODO Auto-generated method stub
+    public void runAgent(Agent agent) {
+        postToMaster("/agents/running", AgentManager.getInstance().getAllOnlineAgents());
+    }
+    public boolean postMessage(ACLMessage message) {
+        if (message.getInReplyTo() == null) {
+            System.out.println("Message not from master, sending to master");
+            message.setInReplyTo(node.getAlias());
+            postToMaster("/messages/", message);       
+            return false;
+        }
+        if (!message.getInReplyTo().equals("master")) 
+        {
+            System.out.println("Message not from master, sending to master");
+            message.setInReplyTo(node.getAlias());
+            postToMaster("/messages/", message);       
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 
+    @Override
+    public void setRunningAgents(Collection<RunningAgent> agents) {
+        AgentManager.getInstance().setAllOnlineAgents(agents);
     }
 
 }

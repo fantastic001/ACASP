@@ -2,6 +2,7 @@ package com.stefan.cluster;
 
 import java.util.Collection;
 
+import com.stefan.data.ACLMessage;
 import com.stefan.data.Agent;
 import com.stefan.data.RunningAgent;
 
@@ -18,7 +19,10 @@ public interface ControlInterface {
     public void onPong(Node node);
     public void setAgents(Collection<Agent> agents);
 
+    public boolean postMessage(ACLMessage message);
     public Node findNode(String alias);
 
     public void runAgent(Agent user);
+
+    public void setRunningAgents(Collection<RunningAgent> agents);
 }

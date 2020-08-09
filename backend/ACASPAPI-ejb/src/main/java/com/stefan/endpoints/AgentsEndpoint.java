@@ -60,6 +60,15 @@ public class AgentsEndpoint {
 		return AgentManager.getInstance().getOnlineAgents();
 	}
 
+
+	@POST
+	@Path("running")
+	@Produces("application/json")
+	public Collection<RunningAgent> setAllRunningAgents(Collection<RunningAgent> agents) {
+		AgentManager.getInstance().setAllOnlineAgents(agents);
+		return agents;
+	}
+
 	@PUT
 	@Path("running/{type}/{name}")
 	@Produces("application/json")
@@ -71,6 +80,7 @@ public class AgentsEndpoint {
 			System.out.println("Running agent " + name);
 			try {
 				AgentManager.getInstance().login(name, agent.get());
+				control.getControl().runAgent(agent.get());
 			} catch (AgentRunErrorException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -16,4 +16,6 @@ public interface MessageManager {
 	void post(ACLMessage message, long delayMillisec);
 
 	String ping();
+
+	void postOffline(ACLMessage message);
 }

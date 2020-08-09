@@ -1,5 +1,6 @@
 package com.stefan.agent;
 
+import com.google.common.base.Optional;
 import com.stefan.data.Agent;
 import com.stefan.data.RunningAgent;
 
@@ -26,10 +27,13 @@ public class AgentManager {
     private ArrayList<RunningAgent> online;
     private static AgentManager instance = null;
 
+    private Collection<RunningAgent> allOnlineAgents;
+
     private AgentManager() {
         this.agents = new ArrayList<>();
         online = new ArrayList<>();
         loginListeners = new ArrayList<>();
+        allOnlineAgents = new ArrayList<>();
     }
 
     @PostConstruct
@@ -93,7 +97,9 @@ public class AgentManager {
                 System.out.println(">>> " + currentAgent.getId().getType().getFullName());
                 String pkg = agent.getId().getType().getFullName();
                 System.out.println("Starting agent " + pkg + " with name " + name);
-                online.add(new RunningAgent(name, agent));
+                RunningAgent ra =  new RunningAgent(name, agent);
+                online.add(ra);
+                allOnlineAgents.add(ra);
                 agent.handleStart();
                 return;
             }
@@ -131,6 +137,11 @@ public class AgentManager {
             }
         }
         if (found != null) online.remove(found);
+        final RunningAgent ff = found;
+        java.util.Optional<RunningAgent> o = allOnlineAgents.stream().filter(a -> a == ff).findFirst();
+        if (o.isPresent()) {
+            allOnlineAgents.remove(o.get());
+        }
     }
 
     public Collection<RunningAgent> getOnlineAgents() {
@@ -143,4 +154,15 @@ public class AgentManager {
     public Collection<Agent> getAgents() {
         return this.agents;
     }
+
+    public void setAllOnlineAgents(Collection<RunningAgent> agents) {
+        System.out.println("Setting running agents:");
+        for (RunningAgent a : agents) System.out.println(a.getName());
+        allOnlineAgents = agents;
+    }
+
+    public Collection<RunningAgent> getAllOnlineAgents() {
+        return allOnlineAgents;
+    }
 }
+
