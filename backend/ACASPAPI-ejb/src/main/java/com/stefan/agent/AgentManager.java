@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -88,7 +89,7 @@ public class AgentManager {
         agent.init();
     }
 
-    synchronized public void login(String name, Agent agent) throws AgentRunErrorException {
+    synchronized public RunningAgent login(String name, Agent agent) throws AgentRunErrorException {
         System.out.println("Attempting to start " + agent.getId().getType().getFullName());
         for (Agent currentAgent : this.agents) {
             if (currentAgent.getId().getType().getName().equals(agent.getId().getType().getName())
@@ -101,7 +102,7 @@ public class AgentManager {
                 online.add(ra);
                 allOnlineAgents.add(ra);
                 agent.handleStart();
-                return;
+                return ra;
             }
         }
         throw new AgentRunErrorException();
@@ -120,28 +121,19 @@ public class AgentManager {
 		return "Agent-" + generatedString;
 	}
 
-    public void logout(Agent agent) {
-        RunningAgent found = null;
-        for (Agent currentAgent : this.agents) {
-            if (agent.getId().equals(currentAgent.getId())) {
-                for (LoginListener listener : this.loginListeners) {
-                    listener.agentLoggedOut(agent);
-                }
-                agent.handleStop();
-                // remove it from logged agents 
-                for (RunningAgent u : online) {
-                    if (u.getAgent().getId().equals(agent.getId())) {
-                        found = u;
-                    }
-                }
+    public void logout(String name) {
+        Collection<RunningAgent> toRemove = this.online.stream()
+            .filter(agent -> (agent.getName().equals(name)))
+            .collect(Collectors.toList());
+        for (RunningAgent x : toRemove) {
+            System.out.println("Removing agent: " + x.getName());
+            this.online.remove(x);
+            this.allOnlineAgents.remove(x);
+            for (LoginListener listener : this.loginListeners) {
+                listener.agentLoggedOut(x.getAgent());
             }
         }
-        if (found != null) online.remove(found);
-        final RunningAgent ff = found;
-        java.util.Optional<RunningAgent> o = allOnlineAgents.stream().filter(a -> a == ff).findFirst();
-        if (o.isPresent()) {
-            allOnlineAgents.remove(o.get());
-        }
+        this.setAllOnlineAgents(this.allOnlineAgents);
     }
 
     public Collection<RunningAgent> getOnlineAgents() {

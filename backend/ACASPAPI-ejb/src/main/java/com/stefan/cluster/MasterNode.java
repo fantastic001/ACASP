@@ -70,11 +70,23 @@ public class MasterNode implements ControlInterface {
         if (node != null) {
             System.out.println("Removing node from registered nodes: " + node.getAlias());
             nodes.remove(node);
+            System.out.println("Removing running agents from all nodes");
+            ArrayList<RunningAgent> agentsToStay = new ArrayList<>();
+            for (RunningAgent x : AgentManager.getInstance().getAllOnlineAgents()) {
+                if (x.getNodeAlias().equals(node.getAlias())) {
+                    System.out.println(x.getName());
+                }
+                else {
+                    agentsToStay.add(x);
+                }
+            }
+            AgentManager.getInstance().setAllOnlineAgents(agentsToStay);
         }
         System.out.println("Notifying all other nodes of removed node");
         for (Node n : nodes) {
             System.out.println("Notify " + n.getAlias());
             n.deleteAsync("/node/" + node.getAlias());
+            n.postAsync("/agents/running/", AgentManager.getInstance().getAllOnlineAgents());
         }
         System.out.println("All nodes notified");
     }
@@ -139,7 +151,8 @@ public class MasterNode implements ControlInterface {
     }
 
     @Override
-    public void runAgent(Agent agent) {
+    public void runAgent(RunningAgent agent) {
+        agent.setNodeAlias("master");
         for (Node node : nodes) {
             node.postAsync("/agents/running/", AgentManager.getInstance().getAllOnlineAgents());
         }
@@ -161,4 +174,10 @@ public class MasterNode implements ControlInterface {
             AgentManager.getInstance().getOnlineAgents().add(agent);
         }
     }
+    public void agentRemoved(String name) {
+        for (Node node : nodes) {
+            node.postAsync("/agents/running/", AgentManager.getInstance().getAllOnlineAgents());
+        }
+    }
+
 }

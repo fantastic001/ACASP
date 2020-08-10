@@ -22,7 +22,9 @@ public interface ControlInterface {
     public boolean postMessage(ACLMessage message);
     public Node findNode(String alias);
 
-    public void runAgent(Agent user);
+    public void runAgent(RunningAgent agent);
 
     public void setRunningAgents(Collection<RunningAgent> agents);
+
+    public void agentRemoved(String name);
 }

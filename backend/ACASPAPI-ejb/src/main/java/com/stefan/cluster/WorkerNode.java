@@ -145,7 +145,8 @@ public class WorkerNode implements ControlInterface {
     }
 
     @Override
-    public void runAgent(Agent agent) {
+    public void runAgent(RunningAgent agent) {
+        agent.setNodeAlias(node.getAlias());
         postToMaster("/agents/running", AgentManager.getInstance().getAllOnlineAgents());
     }
     public boolean postMessage(ACLMessage message) {
@@ -170,6 +171,12 @@ public class WorkerNode implements ControlInterface {
     @Override
     public void setRunningAgents(Collection<RunningAgent> agents) {
         AgentManager.getInstance().setAllOnlineAgents(agents);
+    }
+    public void agentRemoved(String name) {
+        for (Node n : nodes) {
+            n.postAsync("/agents/running", AgentManager.getInstance().getAllOnlineAgents());
+        }
+        postToMaster("/agents/running", AgentManager.getInstance().getAllOnlineAgents());
     }
 
 }

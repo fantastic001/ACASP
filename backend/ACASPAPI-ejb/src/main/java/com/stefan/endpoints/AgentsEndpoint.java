@@ -79,8 +79,8 @@ public class AgentsEndpoint {
 		if (agent.isPresent()) {
 			System.out.println("Running agent " + name);
 			try {
-				AgentManager.getInstance().login(name, agent.get());
-				control.getControl().runAgent(agent.get());
+				RunningAgent ra =  AgentManager.getInstance().login(name, agent.get());
+				control.getControl().runAgent(ra);
 			} catch (AgentRunErrorException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -97,16 +97,10 @@ public class AgentsEndpoint {
 	@DELETE
 	@Path("running/{name}")
 	@Produces("application/json")
-	public RunningAgent stopAgent(@PathParam("name") String name) {
-		Optional<RunningAgent> agent = AgentManager.getInstance().getOnlineAgents().stream()
-			.filter(a -> a.getName().equals(name)).findFirst();
-		if (agent.isPresent()) {
-			AgentManager.getInstance().logout(agent.get().getAgent());
-		}
-		else {
-			System.out.println("Specified agent not running with given name: " + name);
-		}
-		return agent.orElse(null);
+	public String stopAgent(@PathParam("name") String name) {
+		AgentManager.getInstance().logout(name);
+		control.getControl().agentRemoved(name);
+		return name;
 	}
 
 	

@@ -4,10 +4,12 @@ public class RunningAgent {
     
     private Agent agent; 
     private String name;
+    private String nodeAlias;
 
     public RunningAgent() {
         this.name = "";
         this.agent = null;
+        this.nodeAlias = "";
     }
 
     public RunningAgent(String name, Agent agent) {
@@ -25,6 +27,14 @@ public class RunningAgent {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNodeAlias() {
+        return this.nodeAlias;
+    }
+
+    public void setNodeAlias(String alias) {
+        this.nodeAlias = alias;
     }
 
 }
