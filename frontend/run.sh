@@ -9,8 +9,8 @@ npm run-script build
 popd
 
 docker run -it --rm \
-	--name prodex_frontend \
-	--link at_chat_deploy \
+	--name acasp_frontend \
+	--link at_acasp_deploy \
 	--volume "$FRONTEND_DIR/dist":/usr/share/nginx/html/frontend/dist \
 	--volume "$FRONTEND_DIR/index.html":/usr/share/nginx/html/frontend/index.html \
 	--volume "$FRONTEND_DIR/nginx/":/etc/nginx/ \

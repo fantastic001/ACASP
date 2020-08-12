@@ -1,10 +1,10 @@
 <script>
-import CheckRoleService from "./service";
-import CheckRole from "./CheckRole.vue";
+import AgentClassService from "./service";
+import AgentClass from "./AgentClass.vue";
 
 
 export default {
-    name: "multi-CheckRole",
+    name: "multi-AgentClass",
     props: {
         filter: {
             type: Function,
@@ -18,21 +18,21 @@ export default {
     },
     mounted: function () 
     {
-        CheckRoleService.list().then(response => this.items = response.data);
+        AgentClassService.list().then(response => this.items = response.data);
     },
     components: {
-    	"CheckRole": CheckRole
+    	"AgentClass": AgentClass
     }
 }
 </script>
 
 <template>
-    <div class="multi-CheckRole"> 
-      <CheckRole
+    <div class="multi-AgentClass"> 
+      <AgentClass
       	v-for="item in items.filter(filter)"
       	:id="item.id"
       	:key="item.id"
-        :CheckRole="item.id"
+        :AgentClass="item"
           />
     </div>
 

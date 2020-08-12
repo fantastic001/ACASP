@@ -13,23 +13,8 @@ export default {
   components: {
   },
   methods:{
-	  logOut: function() 
-		{
-			AuthService.logout().then(response => {
-				window.location.href = "/frontend/";
-				loocalStorage.setItem("user", "");
-				loocalStorage.setItem("role", "");
-			});
-		}
   },
   mounted: function () {
-	this.$store.subscribe((mutation, state) => {
-		console.log("Logged as: ", state.user, " with role: ", state.role);
-		console.log(this);
-		this.data.user = state.user;
-		this.data.role = state.role;
-		console.log("State changed");
-	})
   }
 }
 
@@ -42,12 +27,6 @@ export default {
 	<div class="navbar-nav">
         <router-link to='/'>Home</router-link>
 
-        <router-link v-if='data.role == "NOT_LOGGED"' to='/login'>Login</router-link>
-        <router-link v-if='data.role == "NOT_LOGGED"' to='/registration'>Registration</router-link>
-
-        <router-link v-if="data.role != 'NOT_LOGGED'" to='/logout'>Log out</router-link>
-        <router-link v-if="data.role == 'LOGGED'" to='/profile'>Profile</router-link>
-		<router-link to="/users">Users</router-link>
 	</div>
 	
 	<p class="my-2 my-lg-0" v-if="data.role != 'NOT_LOGGED'">Logged as: {{ data.user }}</p>
