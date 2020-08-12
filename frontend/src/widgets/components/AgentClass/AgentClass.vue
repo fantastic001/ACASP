@@ -18,6 +18,7 @@ export default {
         run: function() {
             AgentClassService.run(this.data.fullName, this.name).then(response => {
                 console.log("Agent running");
+                this.name = "";
             });
         }
     }

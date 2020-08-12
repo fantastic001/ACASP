@@ -26,6 +26,7 @@ export default {
     <nav class="main-menu navbar navbar-dark bg-primary navbar-expand-lg">
 	<div class="navbar-nav">
         <router-link to='/'>Home</router-link>
+        <router-link to='/running'>Running agents</router-link>
 
 	</div>
 	
