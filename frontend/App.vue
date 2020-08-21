@@ -27,6 +27,7 @@ export default {
 	<div class="navbar-nav">
         <router-link to='/'>Home</router-link>
         <router-link to='/running'>Running agents</router-link>
+        <router-link to='/msg'>Send message</router-link>
 
 	</div>
 	

@@ -1,14 +1,11 @@
 {
 	"name": "example",
-	"endpoint": "example",
-	"item_endpoints": [
+	"endpoint": "exampleEndpoint",
+	"fields": [
 		{
-			"name": "getStatus",
-			"type": "get"
-		},
-		{
-			"name": "refreshTime",
-			"type": "post"
+			"title": "Username",
+			"name": "username",
+			"type": "text"
 		}
 	]
 }
