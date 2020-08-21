@@ -30,6 +30,7 @@ export default {
 				"replyBy": null
 			},
 			receiversList: "",
+			senderString: "self.frontend",
 
         };
     },
@@ -47,6 +48,14 @@ export default {
 					}
 				}
 			);
+			this.data.sender = {
+						name: "",
+						hostAlias: "",
+						type: {
+							module: this.senderString.split(".").slice(0,-1).join("."),
+							name: this.senderString.split(".").reverse()[0],
+						}
+					}
 			MessageSendFormService.submit(this.data).then(response => {
 				if (response.data.code == 0) this.data.success = true;
 				else this.data.success = false;
@@ -62,6 +71,9 @@ export default {
         <div class="success-box" v-if="success">Message has been sent</div>
 	<div v-if="!success"> 
 		
+		<p>
+		<input type="text" class="form-control" placeholder="Sender" v-model="senderString" />
+		</p>
 		
 		<p>
 		<input type="text" class="form-control" placeholder="Receivers (separated by space)" v-model="receiversList" />
