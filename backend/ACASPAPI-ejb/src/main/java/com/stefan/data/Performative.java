@@ -3,5 +3,11 @@ package com.stefan.data;
 import java.io.Serializable;
 
 public enum Performative {
-    DEFAULT
+    DEFAULT,
+    REQUEST,
+    ACCEPT,
+    REJECT, 
+    START,
+    SUCCESS,
+    ERROR
 }
