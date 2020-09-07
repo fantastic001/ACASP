@@ -99,6 +99,7 @@ public class AgentManager {
                 String pkg = agent.getId().getType().getFullName();
                 System.out.println("Starting agent " + pkg + " with name " + name);
                 RunningAgent ra =  new RunningAgent(name, agent);
+                ra.setId(agent.getId());
                 online.add(ra);
                 allOnlineAgents.add(ra);
                 agent.handleStart();

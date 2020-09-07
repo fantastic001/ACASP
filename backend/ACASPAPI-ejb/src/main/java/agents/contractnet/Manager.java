@@ -83,7 +83,7 @@ public class Manager implements Agent {
     private Collection<AID> findAllAvailableContractors() {
         System.out.println("Finding all available contractors");
         return AgentManager.getInstance().getAllOnlineAgents().stream()
-            .map(x -> x.getAgent().getId())
+            .map(x -> x.getId())
             .filter(x -> x.getType().getFullName().equals("stefan.agents.contractnet.contractor"))
             .collect(Collectors.toList());
     }
