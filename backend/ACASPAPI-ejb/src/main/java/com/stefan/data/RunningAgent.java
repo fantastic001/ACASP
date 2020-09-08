@@ -13,9 +13,10 @@ public class RunningAgent {
         this.nodeAlias = "";
     }
 
-    public RunningAgent(String name, Agent agent) {
+    public RunningAgent(String name, Agent agent, AID id) {
         this.agent = agent;
         this.name = name;
+        this.id = id; 
     }
 
     public void setId(AID id) {

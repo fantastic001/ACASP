@@ -47,13 +47,13 @@ public class JMSFactory {
 	@PostConstruct
 	public void postConstruct() {
 		try {
-			System.out.println("Creating jms factory");
+			// System.out.println("Creating jms factory");
 			//connection = connectionFactory.createConnection(siebog.nodemanager.Global.USERNAME, siebog.nodemanager.Global.PASSWORD);
 			connection = connectionFactory.createConnection("guest", "guest.guest.1");
 			connection.setClientID(getRandomId());
-			System.out.println("start jms factory");
+			// System.out.println("start jms factory");
 			connection.start();
-			System.out.println("jms construction done");
+			// System.out.println("jms construction done");
 		} catch (JMSException ex) {
 			throw new IllegalStateException(ex);
 		}

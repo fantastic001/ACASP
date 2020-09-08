@@ -72,6 +72,9 @@ public class Contractor implements Agent {
 
     @Override
     public void handleMessage(ACLMessage msg) {
+        if (! msg.getSender().getType().getFullName().equals("stefan.agents.contractnet.manager")) {
+            return;
+        }
         switch (msg.getPerformative()) {
             case ACCEPT:
                 if (msg.getContent().equals(getId().getName())) {

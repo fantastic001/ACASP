@@ -28,18 +28,18 @@ public class ResourceReader {
             doc = parseXML("properties.xml");
         } 
         catch (Exception e) {
-            System.out.println("ERROR: cannot parse XML properties file");
+            // System.out.println("ERROR: cannot parse XML properties file");
             doc = null;
         }
     }
     // get file from classpath, resources folder
     private InputStream getFileFromResources(String fileName) {
-        System.out.println("Getting class loader...");
+        // System.out.println("Getting class loader...");
         ClassLoader classLoader = getClass().getClassLoader();
 
-        System.out.println("Locating resource...");
+        // System.out.println("Locating resource...");
         URL resource = classLoader.getResource(fileName);
-        System.out.println("Resource URL: " + resource.getPath());
+        // System.out.println("Resource URL: " + resource.getPath());
         if (resource == null) {
             throw new IllegalArgumentException("file is not found!");
         } else {
@@ -55,12 +55,12 @@ public class ResourceReader {
 
     private Document parseXML(String filename) {
         try {
-            System.out.println("Creating factories and XML parsers...");
+            // System.out.println("Creating factories and XML parsers...");
             //an instance of factory that gives a document builder  
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();  
             //an instance of builder to parse the specified xml file  
             DocumentBuilder db = dbf.newDocumentBuilder();  
-            System.out.println("Parsing XML property configuration...");
+            // System.out.println("Parsing XML property configuration...");
             Document doc = db.parse(getFileFromResources(filename));  
             doc.getDocumentElement().normalize();  
             return doc;
@@ -72,16 +72,16 @@ public class ResourceReader {
     }
 
     public String getProperty(String propertyName, String defaultValue) {
-        System.out.println("Searching for property " + propertyName);
+        // System.out.println("Searching for property " + propertyName);
         if (System.getenv(propertyName) != null) return System.getenv(propertyName);
         if (doc == null) return defaultValue;
-        System.out.println("Root element: " + doc.getDocumentElement().getNodeName());  
+        // System.out.println("Root element: " + doc.getDocumentElement().getNodeName());  
         NodeList nodeList = doc.getElementsByTagName("property");  
         // nodeList is not iterable, so we are using for loop  
         for (int itr = 0; itr < nodeList.getLength(); itr++)   
         {  
             Node node = nodeList.item(itr);  
-            System.out.println("\nNode Name :" + node.getNodeName());  
+            // System.out.println("\nNode Name :" + node.getNodeName());  
             if (node.getNodeType() == Node.ELEMENT_NODE)   
             {  
                 Element eElement = (Element) node;
@@ -93,20 +93,6 @@ public class ResourceReader {
             }
         }
         return defaultValue;
-    }
-
-    private static void printFile(File file) throws IOException {
-
-        if (file == null) return;
-
-        try (FileReader reader = new FileReader(file);
-             BufferedReader br = new BufferedReader(reader)) {
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                System.out.println(line);
-            }
-        }
     }
 
 }

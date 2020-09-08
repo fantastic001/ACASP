@@ -62,7 +62,7 @@ public class Node {
         
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(UriBuilder.fromPath(path));
-        System.out.println("Preparing request for sending to " + path);
+        // System.out.println("Preparing request for sending to " + path);
         return target.request().post(Entity.entity(body, "application/json"));
 	}
 
@@ -71,7 +71,7 @@ public class Node {
         
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(UriBuilder.fromPath(path));
-        System.out.println("Preparing request for sending to " + path);
+        // System.out.println("Preparing request for sending to " + path);
         return target.request().async().post(Entity.entity(body, "application/json"));
 	}
 	public <R> Future<Response> getAsync(String location) {
@@ -79,7 +79,7 @@ public class Node {
         
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(UriBuilder.fromPath(path));
-        System.out.println("Preparing request for sending to " + path);
+        // System.out.println("Preparing request for sending to " + path);
         return target.request().async().get();
 	}
 	public <R> Future<Response> putAsync(String location) {
@@ -87,7 +87,7 @@ public class Node {
         
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(UriBuilder.fromPath(path));
-        System.out.println("Preparing request for sending to " + path);
+        // System.out.println("Preparing request for sending to " + path);
         return target.request().async().put(null);
 	}
 	public <R> Future<Response> deleteAsync(String location) {
@@ -95,7 +95,7 @@ public class Node {
         
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(UriBuilder.fromPath(path));
-        System.out.println("Preparing request for sending to " + path);
+        // System.out.println("Preparing request for sending to " + path);
         return target.request().async().delete();
 	}
 

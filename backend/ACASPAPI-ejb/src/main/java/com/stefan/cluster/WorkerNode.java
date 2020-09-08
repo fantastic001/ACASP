@@ -61,16 +61,16 @@ public class WorkerNode implements ControlInterface {
 
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(UriBuilder.fromPath(path));
-        System.out.println("Preparing request for registration...");
+        // System.out.println("Preparing request for registration...");
         String alias = reader.getProperty("NODE_ALIAS", "node-" + randomNodeAlias());
-        System.out.println("Alias: " + alias);
+        // System.out.println("Alias: " + alias);
         node = new Node(alias, reader.getProperty("NODE_HOSTNAME", System.getenv("HOSTNAME")),
                 Integer.parseInt(reader.getProperty("NODE_PORT", "8080")),
                 reader.getProperty("NODE_PATH", "/ACASPAPI-web/rest"));
-        System.out.println("Sending POST request to master to URL: " + path);
+        // System.out.println("Sending POST request to master to URL: " + path);
 
         Response res = target.request().post(Entity.entity(node, "application/json"));
-        System.out.println("Node registration response: " + res.getStatus());
+        // System.out.println("Node registration response: " + res.getStatus());
         // RegisterEndpoint proxy = target.proxy(RegisterEndpoint.class);
         // proxy.register(new Node("node", "hostname", 80, "/"));
         // get list of all users from master and add them to UserManager
@@ -151,14 +151,14 @@ public class WorkerNode implements ControlInterface {
     }
     public boolean postMessage(ACLMessage message) {
         if (message.getInReplyTo() == null) {
-            System.out.println("Message not from master, sending to master");
+            // System.out.println("Message not from master, sending to master");
             message.setInReplyTo(node.getAlias());
             postToMaster("/messages/", message);       
             return false;
         }
         if (!message.getInReplyTo().equals("master")) 
         {
-            System.out.println("Message not from master, sending to master");
+            // System.out.println("Message not from master, sending to master");
             message.setInReplyTo(node.getAlias());
             postToMaster("/messages/", message);       
             return false;

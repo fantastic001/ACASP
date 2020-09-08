@@ -77,7 +77,7 @@ public class AgentsEndpoint {
 				agent_ -> agent_.getId().getType().getFullName().equals(type))
 				.findFirst();
 		if (agent.isPresent()) {
-			System.out.println("Running agent " + name);
+			// System.out.println("Running agent " + name);
 			try {
 				RunningAgent ra =  AgentManager.getInstance().login(name, agent.get());
 				control.getControl().runAgent(ra);

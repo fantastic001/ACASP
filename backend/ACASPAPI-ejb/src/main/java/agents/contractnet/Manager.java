@@ -81,7 +81,6 @@ public class Manager implements Agent {
     }
 
     private Collection<AID> findAllAvailableContractors() {
-        System.out.println("Finding all available contractors");
         return AgentManager.getInstance().getAllOnlineAgents().stream()
             .map(x -> x.getId())
             .filter(x -> x.getType().getFullName().equals("stefan.agents.contractnet.contractor"))
@@ -90,6 +89,10 @@ public class Manager implements Agent {
 
     private void request() {
         contractors = new ArrayList<>();
+        System.out.println("Contractors:");
+        for (AID c : findAllAvailableContractors()) {
+            System.out.println(c.getName());
+        }
         messageManager.post(new ACLMessage(
             Performative.REQUEST, 
             this.getId(), 
@@ -111,6 +114,9 @@ public class Manager implements Agent {
 
     @Override
     public void handleMessage(ACLMessage msg) {
+        if (! msg.getSender().getType().getFullName().equals("stefan.agents.contractnet.contractor")) {
+            return;
+        }
         switch (msg.getPerformative()) {
             case START: // manager sends initial request
                 request();
@@ -140,10 +146,13 @@ public class Manager implements Agent {
                         null
                     ));
                     contractors.remove(contractor);
+                    for (AID c : contractors) {
+                        System.out.println("MANAGER: rejecting " + c.getName());
+                    }
                     messageManager.post(new ACLMessage(
                         Performative.REJECT, 
                         this.getId(), 
-                        receivers, 
+                        contractors, 
                         null, 
                         contractor.getName(), 
                         null, 

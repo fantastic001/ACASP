@@ -40,7 +40,6 @@ public class Control {
     private boolean isMaster() {
         ResourceReader reader = new ResourceReader();
         if (reader.getProperty("masterHostname", "").equals("")) {
-            System.out.println("This node is master node");
             return true;
         }
         else return false;

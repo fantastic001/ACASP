@@ -44,7 +44,6 @@ public class MasterNode implements ControlInterface {
             current.post("/node/", node);
             node.postAsync("/nodes/", current);
         }
-        System.out.println("Sending list of currently running agents which is:");
         for (RunningAgent a : AgentManager.getInstance().getAllOnlineAgents()) {
             System.out.println(a.getName());
         }
@@ -70,31 +69,24 @@ public class MasterNode implements ControlInterface {
         if (node != null) {
             System.out.println("Removing node from registered nodes: " + node.getAlias());
             nodes.remove(node);
-            System.out.println("Removing running agents from all nodes");
             ArrayList<RunningAgent> agentsToStay = new ArrayList<>();
             for (RunningAgent x : AgentManager.getInstance().getAllOnlineAgents()) {
-                if (x.getNodeAlias().equals(node.getAlias())) {
-                    System.out.println(x.getName());
-                }
-                else {
+                if (! x.getNodeAlias().equals(node.getAlias())) {
                     agentsToStay.add(x);
                 }
             }
             AgentManager.getInstance().setAllOnlineAgents(agentsToStay);
         }
-        System.out.println("Notifying all other nodes of removed node");
         for (Node n : nodes) {
-            System.out.println("Notify " + n.getAlias());
             n.deleteAsync("/node/" + node.getAlias());
             n.postAsync("/agents/running/", AgentManager.getInstance().getAllOnlineAgents());
         }
-        System.out.println("All nodes notified");
     }
     @Override
     public void onPing() {
         Collection<Node> removal = new ArrayList<>();
         for (Node node : nodes) {
-            System.out.println("Health check for " + node.getAlias());
+            // System.out.println("Health check for " + node.getAlias());
             try {
                 node.getAsync("/node/").get(1, TimeUnit.SECONDS);
             } 
@@ -159,7 +151,7 @@ public class MasterNode implements ControlInterface {
     }
 
     public boolean postMessage(ACLMessage message) {
-        System.out.println("Master node recieved message either from itself or from other nodes");
+        // System.out.println("Master node recieved message either from itself or from other nodes");
         message.setInReplyTo("master");
         for (Node node : nodes) {
             node.postAsync("/messages/", message);

@@ -78,7 +78,6 @@ public class AgentManager {
     }
 
     synchronized public void registerAgent(Agent agent) throws AgentExistsException {
-        System.out.println("Attempting to register " + agent.getId().getType().getFullName());
         for (Agent u : this.agents) {
             String pkg = u.getId().getType().getModule() + "." + u.getId().getType().getName();
             if (pkg.equals(agent.getId().getType().getModule() + "." + agent.getId().getType().getName())) 
@@ -90,19 +89,17 @@ public class AgentManager {
     }
 
     synchronized public RunningAgent login(String name, Agent agent) throws AgentRunErrorException {
-        System.out.println("Attempting to start " + agent.getId().getType().getFullName());
         for (Agent currentAgent : this.agents) {
             if (currentAgent.getId().getType().getName().equals(agent.getId().getType().getName())
               && currentAgent.getId().getType().getModule().equals(agent.getId().getType().getModule())
             ) {
-                System.out.println(">>> " + currentAgent.getId().getType().getFullName());
                 String pkg = agent.getId().getType().getFullName();
                 System.out.println("Starting agent " + pkg + " with name " + name);
-                RunningAgent ra =  new RunningAgent(name, agent);
-                ra.setId(agent.getId());
+                RunningAgent ra =  new RunningAgent(name, agent, agent.getId());
                 online.add(ra);
                 allOnlineAgents.add(ra);
                 agent.handleStart();
+                ra.setId(agent.getId());
                 return ra;
             }
         }
@@ -149,7 +146,6 @@ public class AgentManager {
     }
 
     public void setAllOnlineAgents(Collection<RunningAgent> agents) {
-        System.out.println("Setting running agents:");
         for (RunningAgent a : agents) System.out.println(a.getName());
         allOnlineAgents = agents;
     }
