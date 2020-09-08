@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.Stateful;
@@ -21,27 +22,10 @@ import com.stefan.data.Agent;
 import com.stefan.data.AgentType;
 import com.stefan.message.MessageManagerBean;
 
-@Startup
-@Singleton
+@LocalBean
 public class Pong implements Agent {
 
-    @PostConstruct
-    public void construct() {
-        try {
-            AgentManager.getInstance().registerAgent(this);
-            // AgentManager.getInstance().login(this);
-            System.out.println("Waiting 10 secs for ping agents to start and register");
-            try {
-                Thread.sleep(10000);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        catch (AgentExistsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+
 
     @Override
     public AID getId() {

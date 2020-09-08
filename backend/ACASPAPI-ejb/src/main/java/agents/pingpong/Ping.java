@@ -25,22 +25,10 @@ import javax.ejb.Local;
 import java.lang.Thread;
 import javax.ejb.DependsOn;
 
-@Startup
-@Singleton
+
 @LocalBean
 public class Ping implements Agent {
 
-    @PostConstruct
-    public void construct() {
-        try {
-            AgentManager.getInstance().registerAgent(this);
-            // AgentManager.getInstance().login(this);
-        }
-        catch (AgentExistsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } 
-    }
 
     @Override
     public AID getId() {

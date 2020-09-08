@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -69,6 +71,26 @@ public class ResourceReader {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public Collection<String> getAgentClasses() {
+        ArrayList<String> retval = new ArrayList<>();
+        Document xml = parseXML("agents.xml");
+        NodeList nodeList = xml.getElementsByTagName("agent");  
+        // nodeList is not iterable, so we are using for loop  
+        for (int itr = 0; itr < nodeList.getLength(); itr++)   
+        {  
+            Node node = nodeList.item(itr);  
+            // System.out.println("\nNode Name :" + node.getNodeName());  
+            if (node.getNodeType() == Node.ELEMENT_NODE)   
+            {  
+                Element eElement = (Element) node;
+                String name = eElement.getAttribute("type");
+                System.out.println("Found agent in configuration: " + name);
+                retval.add(name);
+            }
+        }
+        return retval;
     }
 
     public String getProperty(String propertyName, String defaultValue) {

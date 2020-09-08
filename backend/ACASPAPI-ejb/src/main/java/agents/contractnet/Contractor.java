@@ -28,8 +28,7 @@ import javax.ejb.Local;
 import java.lang.Thread;
 import javax.ejb.DependsOn;
 
-@Startup
-@Singleton
+
 @LocalBean
 public class Contractor implements Agent {
 
@@ -53,17 +52,6 @@ public class Contractor implements Agent {
 
     private String id;
 
-    @PostConstruct
-    public void construct() {
-        try {
-            AgentManager.getInstance().registerAgent(this);
-            // AgentManager.getInstance().login(this);
-        }
-        catch (AgentExistsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } 
-    }
 
     @Override
     public AID getId() {
