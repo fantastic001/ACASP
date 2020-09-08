@@ -63,4 +63,11 @@ public class AID implements Serializable{
 		this.type = newValue;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (! (obj instanceof AID)) return false;
+		AID other = (AID) obj; 
+		return getName().equals(other.getName()) 
+		&& getType().getFullName().equals(other.getType().getFullName());
+	}
 }

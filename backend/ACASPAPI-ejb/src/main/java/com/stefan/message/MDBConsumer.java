@@ -44,7 +44,7 @@ public class MDBConsumer implements MessageListener {
 	}
 
 	private void deliverMessage(ACLMessage msg, AID aid) {
-		Optional<RunningAgent> agent = AgentManager.getInstance().getOnlineAgents().stream().filter(a -> a.getAgent().getId().getType().getFullName().equals((aid.getType().getFullName()))).findFirst();
+		Optional<RunningAgent> agent = AgentManager.getInstance().getOnlineAgents().stream().filter(a -> a.getAgent().getId().equals(aid)).findFirst();
 		if (agent.isPresent()) {
 			// System.out.println("Agent found: " + agent.get().getName());
 			agent.get().getAgent().handleMessage(msg);

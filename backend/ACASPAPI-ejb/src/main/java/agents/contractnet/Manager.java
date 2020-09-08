@@ -122,6 +122,7 @@ public class Manager implements Agent {
                 request();
                 break;
             case ACCEPT: // contractor is willing to fullfil request 
+                System.out.println("MANAGER ACCEPT " + msg.getSender().getName());
                 contractors.add(msg.getSender());
                 AID contractor = chooseOneContractor();
                 if (contractor != null) {
