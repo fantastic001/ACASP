@@ -44,8 +44,6 @@ for communicating with agents, JMS is used and publish-subscribe principle
 + =photo_link=
 + link
 
-
-w
 ** CollectorParameters
 
 + hostname
