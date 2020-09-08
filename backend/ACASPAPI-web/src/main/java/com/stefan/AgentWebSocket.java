@@ -9,9 +9,13 @@ import javax.websocket.server.ServerEndpoint;
 
 import com.stefan.agent.LoginListener;
 import com.stefan.agent.AgentManager;
-import com.stefan.data.Agent;
+import com.stefan.data.RunningAgent;
+import com.stefan.message.MessageManager;
+import com.stefan.data.ACLMessage;
+import javax.ejb.EJB;
 
-@ServerEndpoint("/websocket/login")
+
+@ServerEndpoint("/websocket/")
 public class AgentWebSocket implements LoginListener {
     private Session session;
     // TODO agent adding 
@@ -19,13 +23,14 @@ public class AgentWebSocket implements LoginListener {
     // message events
     // agent type update
 
+
     @Override
-    public void agentLoggedIn(Agent agent) {
+    public void agentLoggedIn(RunningAgent agent) {
         session.getAsyncRemote().sendText("LOGIN " + agent.getId());
     }
     @Override
-    public void agentLoggedOut(Agent agent) {
-        // session.getAsyncRemote().sendText("LOGOUT " + user.getUsername());
+    public void agentLoggedOut(RunningAgent agent) {
+        session.getAsyncRemote().sendText("LOGOUT " + agent.getId());
     }
     
     @OnMessage
@@ -45,4 +50,8 @@ public class AgentWebSocket implements LoginListener {
     public void helloOnClose(CloseReason reason) {
         System.out.println("WebSocket connection closed with CloseCode: " + reason.getCloseCode());
     }
+    public void messageSent(ACLMessage msg) {
+        session.getAsyncRemote().sendText("MSG " + msg.getContent());
+    }
+
 }

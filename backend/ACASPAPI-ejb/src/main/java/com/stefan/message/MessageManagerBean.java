@@ -2,6 +2,7 @@
 package com.stefan.message;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +60,7 @@ public class MessageManagerBean implements MessageManager {
 		} catch (JMSException e) {
 		}
 	}
+
 
 	@Override
 	public List<String> getPerformatives() {

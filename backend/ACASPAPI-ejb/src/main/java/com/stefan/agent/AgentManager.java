@@ -100,6 +100,9 @@ public class AgentManager {
                 allOnlineAgents.add(ra);
                 agent.handleStart();
                 ra.setId(agent.getId());
+                for (LoginListener listener : loginListeners) {
+                    listener.agentLoggedIn(ra);
+                }
                 return ra;
             }
         }
@@ -128,7 +131,7 @@ public class AgentManager {
             this.online.remove(x);
             this.allOnlineAgents.remove(x);
             for (LoginListener listener : this.loginListeners) {
-                listener.agentLoggedOut(x.getAgent());
+                listener.agentLoggedOut(x);
             }
         }
         this.setAllOnlineAgents(this.allOnlineAgents);

@@ -18,4 +18,5 @@ public interface MessageManager {
 	String ping();
 
 	void postOffline(ACLMessage message);
+	
 }
