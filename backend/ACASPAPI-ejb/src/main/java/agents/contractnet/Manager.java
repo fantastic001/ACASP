@@ -145,7 +145,13 @@ public class Manager implements Agent {
                         null, 
                         null
                     ));
-                    contractors.remove(contractor);
+                    AID removal = null; 
+                    for (AID cc : contractors) {
+                        if (cc.getName().equals(contractor.getName())) {
+                            removal = cc; 
+                        }
+                    }
+                    contractors.remove(removal);
                     for (AID c : contractors) {
                         System.out.println("MANAGER: rejecting " + c.getName());
                     }
