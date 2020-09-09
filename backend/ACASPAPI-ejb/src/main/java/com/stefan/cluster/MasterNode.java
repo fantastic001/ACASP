@@ -57,10 +57,6 @@ public class MasterNode implements ControlInterface {
     }
 
     @Override
-    public Collection<Agent> getAllAgents() {
-        return AgentManager.getInstance().getAgents();
-    }
-    @Override
     public void nodeRemoved(String alias) {
         Node node = null; 
         for (Node n : nodes) {
@@ -122,10 +118,6 @@ public class MasterNode implements ControlInterface {
         
     }
 
-    @Override
-    public void setAgents(Collection<Agent> agents) {
-        
-    }
 
     @Override
     public Node findNode(String alias) {

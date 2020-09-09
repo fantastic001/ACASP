@@ -1,0 +1,8 @@
+<agents>
+<!-- <agent type="agents.pingpong.Ping" /> -->
+<agent type="agents.pingpong.Pong" />
+<agent type="agents.pingpong.Ping" />
+<agent type="agents.contractnet.Manager" />
+<agent type="agents.contractnet.Contractor" />
+
+</agents>

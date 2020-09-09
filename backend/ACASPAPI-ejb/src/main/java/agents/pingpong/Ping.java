@@ -20,27 +20,16 @@ import com.stefan.data.ACLMessage;
 import com.stefan.data.AID;
 import com.stefan.data.Agent;
 import com.stefan.data.AgentType;
+import com.stefan.message.MessageManager;
 import com.stefan.message.MessageManagerBean;
 import javax.ejb.Local;
 import java.lang.Thread;
 import javax.ejb.DependsOn;
 
-@Startup
-@Singleton
+
 @LocalBean
 public class Ping implements Agent {
 
-    @PostConstruct
-    public void construct() {
-        try {
-            AgentManager.getInstance().registerAgent(this);
-            // AgentManager.getInstance().login(this);
-        }
-        catch (AgentExistsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } 
-    }
 
     @Override
     public AID getId() {
@@ -55,8 +44,7 @@ public class Ping implements Agent {
         }
     }
 
-    @EJB
-    private MessageManagerBean mmgr;
+    private MessageManager mmgr;
     
     @Override
     public void handleStart() {
@@ -73,7 +61,8 @@ public class Ping implements Agent {
     }
 
     @Override
-    public void init() {
+    public void init(MessageManager msg) {
+        this.mmgr = msg;
 
     }
 

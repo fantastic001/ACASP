@@ -31,28 +31,15 @@ import javax.ejb.Local;
 import java.lang.Thread;
 import javax.ejb.DependsOn;
 
-@Startup
-@Singleton
+
 @LocalBean
 public class Manager implements Agent {
     
     private String id; 
     private ArrayList<AID> contractors; 
 
-    @EJB
     private MessageManager messageManager;
 
-    @PostConstruct
-    public void construct() {
-        try {
-            this.id = getRandomAgentName();
-            AgentManager.getInstance().registerAgent(this);
-        }
-        catch (AgentExistsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } 
-    }
 
     private String getRandomAgentName() {
         int leftLimit = 97; // letter 'a'
@@ -207,8 +194,9 @@ public class Manager implements Agent {
     }
 
     @Override
-    public void init() {
-
+    public void init(MessageManager messageManager) {
+        id = getRandomAgentName();
+        this.messageManager = messageManager;
     }
 
     @Override
