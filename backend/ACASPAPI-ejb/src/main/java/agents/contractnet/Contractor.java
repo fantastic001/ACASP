@@ -47,7 +47,6 @@ public class Contractor implements Agent {
 		return "Agent-" + generatedString;
     }
     
-    @EJB
     private MessageManager messageManager;
 
     private String id;
@@ -143,8 +142,8 @@ public class Contractor implements Agent {
     }
 
     @Override
-    public void init() {
-
+    public void init(MessageManager messageManager) {
+        this.messageManager = messageManager;
     }
 
     @Override

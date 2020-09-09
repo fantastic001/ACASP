@@ -38,7 +38,6 @@ public class Manager implements Agent {
     private String id; 
     private ArrayList<AID> contractors; 
 
-    @EJB
     private MessageManager messageManager;
 
 
@@ -195,8 +194,9 @@ public class Manager implements Agent {
     }
 
     @Override
-    public void init() {
+    public void init(MessageManager messageManager) {
         id = getRandomAgentName();
+        this.messageManager = messageManager;
     }
 
     @Override

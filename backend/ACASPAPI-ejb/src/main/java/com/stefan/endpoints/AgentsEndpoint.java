@@ -35,6 +35,7 @@ import com.stefan.cluster.Node;
 import com.stefan.data.Agent;
 import com.stefan.data.AgentType;
 import com.stefan.data.RunningAgent;
+import com.stefan.message.MessageManager;
 
 @Stateless
 @Path("agents")
@@ -45,12 +46,14 @@ public class AgentsEndpoint {
 	@EJB
 	private Control control;
 
+	@EJB
+	private MessageManager messageManager;
+
 	@GET
 	@Path("classes")
 	@Produces("application/json")
 	public Collection<AgentType> getAllTypes() {
-		return AgentManager.getInstance().getAgents().stream().map(agent -> agent.getId().getType())
-				.collect(Collectors.toList());
+		return AgentManager.getInstance().getAgentTypes();
 	}
 
 	@GET
@@ -72,24 +75,18 @@ public class AgentsEndpoint {
 	@PUT
 	@Path("running/{type}/{name}")
 	@Produces("application/json")
-	public Agent runAgent(@PathParam("type") String type, @PathParam("name") String name) {
-		Optional<Agent> agent = AgentManager.getInstance().getAgents().stream().filter(
-				agent_ -> agent_.getId().getType().getFullName().equals(type))
-				.findFirst();
-		if (agent.isPresent()) {
-			// System.out.println("Running agent " + name);
-			try {
-				RunningAgent ra =  AgentManager.getInstance().login(name, agent.get());
-				control.getControl().runAgent(ra);
-			} catch (AgentRunErrorException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	public RunningAgent runAgent(@PathParam("type") String type, @PathParam("name") String name) {
+		try {
+			Agent agent = AgentManager.getInstance().agentLookup(type);
+			agent.init(messageManager);
+			RunningAgent ra =  AgentManager.getInstance().login(name, agent);
+			control.getControl().runAgent(ra);
+			return ra;
+		} catch (AgentRunErrorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		else {
-			System.out.println("Agent not found");
-		}
-		return agent.orElse(null);
+		return null;
 	}
 
 	

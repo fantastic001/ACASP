@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.stefan.data.ACLMessage;
 import com.stefan.data.Agent;
+import com.stefan.data.AgentType;
 import com.stefan.data.RunningAgent;
 
 public interface ControlInterface {
@@ -13,11 +14,9 @@ public interface ControlInterface {
     public void finish();
     public void nodeAdded(Node node);
     public void nodeRemoved(String alias);
-    public Collection<Agent> getAllAgents();
     public Collection<RunningAgent> getRunningAgents();
     public void onPing();
     public void onPong(Node node);
-    public void setAgents(Collection<Agent> agents);
 
     public boolean postMessage(ACLMessage message);
     public Node findNode(String alias);

@@ -20,6 +20,7 @@ import com.stefan.data.ACLMessage;
 import com.stefan.data.AID;
 import com.stefan.data.Agent;
 import com.stefan.data.AgentType;
+import com.stefan.message.MessageManager;
 import com.stefan.message.MessageManagerBean;
 
 @LocalBean
@@ -40,8 +41,7 @@ public class Pong implements Agent {
         }
     }
 
-    @EJB
-    private MessageManagerBean mmgr;
+    private MessageManager mmgr;
     
     @Override
     public void handleStart() {
@@ -55,8 +55,8 @@ public class Pong implements Agent {
     }
 
     @Override
-    public void init() {
-
+    public void init(MessageManager msg) {
+        this.mmgr = msg;
     }
 
     @Override

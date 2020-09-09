@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.stefan.agent.AgentManager;
 import com.stefan.data.ACLMessage;
 import com.stefan.data.Agent;
+import com.stefan.data.AgentType;
 import com.stefan.data.RunningAgent;
 import com.stefan.message.MessageManager;
 
@@ -128,21 +129,12 @@ public class WorkerNode implements ControlInterface {
         return new Node(masterHostname);
     }
 
-    @Override
-    public Collection<Agent> getAllAgents() {
-        return AgentManager.getInstance().getAgents();
-    }
 
     @Override
     public Collection<RunningAgent> getRunningAgents() {
         return AgentManager.getInstance().getOnlineAgents();
     }
 
-    @Override
-    public void setAgents(Collection<Agent> agents) {
-        // TODO Auto-generated method stub
-
-    }
 
     @Override
     public void runAgent(RunningAgent agent) {

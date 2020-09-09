@@ -43,20 +43,7 @@ public class Control {
 
     @PostConstruct
     private void run() {
-        Collection<String> classes = new ResourceReader().getAgentClasses();
-        for (String aClass : classes) {
-            try {
-                System.out.println("Finding class " + aClass);
-                Context ctx = new InitialContext();
-                AgentManager.getInstance().registerAgent( ctx.lookup(aClass));
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (AgentExistsException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+
         node = getControl();
     }
 
