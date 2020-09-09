@@ -36,23 +36,11 @@ import javax.ejb.DependsOn;
 @LocalBean
 public class Fetcher implements Agent {
     
-    @EJB
     private MessageManager messageManager;
 
     private Thread crawlerThread;
 
     private String id; 
-
-    @PostConstruct
-    public void construct() {
-        try {
-            AgentManager.getInstance().registerAgent(this);
-        }
-        catch (AgentExistsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } 
-    }
 
     private String getRandomAgentName() {
         int leftLimit = 97; // letter 'a'
@@ -155,8 +143,9 @@ public class Fetcher implements Agent {
     }
 
     @Override
-    public void init() {
+    public void init(MessageManager messageManager) {
 
+        this.messageManager = messageManager;
     }
 
     @Override

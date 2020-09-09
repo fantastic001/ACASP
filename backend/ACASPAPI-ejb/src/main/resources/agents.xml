@@ -4,5 +4,6 @@
 <agent type="agents.pingpong.Ping" />
 <agent type="agents.contractnet.Manager" />
 <agent type="agents.contractnet.Contractor" />
+<agent type="agents.acasp.Fetcher" />
 
 </agents>
