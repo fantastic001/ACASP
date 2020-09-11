@@ -14,6 +14,7 @@ import org.reflections.util.ConfigurationBuilder;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Random;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
@@ -75,13 +76,13 @@ public class AgentManager {
         return AgentManager.instance;
     }
 
-    synchronized public RunningAgent login(String name, Agent agent) throws AgentRunErrorException {
+    synchronized public RunningAgent login(String name, Agent agent, Map<String, String[]> params) throws AgentRunErrorException {
         String pkg = agent.getId().getType().getFullName();
         System.out.println("Starting agent " + pkg + " with name " + name);
         RunningAgent ra =  new RunningAgent(name, agent, agent.getId());
         online.add(ra);
         allOnlineAgents.add(ra);
-        agent.handleStart();
+        agent.handleStart(params);
         ra.setId(agent.getId());
         for (LoginListener listener : loginListeners) {
             listener.agentLoggedIn(ra);

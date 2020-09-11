@@ -3,6 +3,7 @@ package agents.contractnet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -132,7 +133,7 @@ public class Contractor implements Agent {
     private MessageManagerBean mmgr;
     
     @Override
-    public void handleStart() {
+    public void handleStart(Map<String, String[]> params) {
         id = getRandomAgentName();
     }
 

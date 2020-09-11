@@ -3,6 +3,7 @@ package agents.pingpong;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -47,7 +48,7 @@ public class Ping implements Agent {
     private MessageManager mmgr;
     
     @Override
-    public void handleStart() {
+    public void handleStart(Map<String, String[]> params) {
         List<AID> pongAgents = new ArrayList<>();
         pongAgents.add(new AID("", "", new AgentType("pong", "stefan.agents.pingpong")));
         System.out.println("Sending message to pong agents");

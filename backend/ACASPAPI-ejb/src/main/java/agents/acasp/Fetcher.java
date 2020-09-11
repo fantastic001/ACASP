@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -42,6 +43,8 @@ public class Fetcher implements Agent {
 
     private String id; 
 
+    private String url; 
+
     private String getRandomAgentName() {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
@@ -70,8 +73,7 @@ public class Fetcher implements Agent {
         }
         switch (msg.getPerformative()) {
             case START: // master sends initial request
-                crawlerThread = new Thread(new Crawler(msg.getContent().split(" ")[0], msg.getContent().split(" ")[1]));
-                crawlerThread.start();
+                
                 break;
             case ACCEPT: // contractor is willing to fullfil request 
                 break;
@@ -133,8 +135,12 @@ public class Fetcher implements Agent {
     private MessageManagerBean mmgr;
     
     @Override
-    public void handleStart() {
+    public void handleStart(Map<String, String[]> params) {
         crawlerThread = null;
+        url = params.getOrDefault("site", new String[] {"www.google.com"})[0];
+        System.out.println("Starting fetcher for site: " + url);
+        crawlerThread = new Thread(new Crawler(url, "stan"));
+        crawlerThread.start();
     }
 
     @Override

@@ -3,6 +3,7 @@ package agents.pingpong;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -44,7 +45,7 @@ public class Pong implements Agent {
     private MessageManager mmgr;
     
     @Override
-    public void handleStart() {
+    public void handleStart(Map<String, String[]> params) {
         System.out.println("Starting pong agent");
     }
 

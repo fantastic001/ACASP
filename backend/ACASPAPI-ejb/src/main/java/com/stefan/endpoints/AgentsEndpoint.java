@@ -79,7 +79,7 @@ public class AgentsEndpoint {
 		try {
 			Agent agent = AgentManager.getInstance().agentLookup(type);
 			agent.init(messageManager);
-			RunningAgent ra =  AgentManager.getInstance().login(name, agent);
+			RunningAgent ra =  AgentManager.getInstance().login(name, agent, request.getParameterMap());
 			control.getControl().runAgent(ra);
 			return ra;
 		} catch (AgentRunErrorException e) {
