@@ -138,6 +138,9 @@ public class Fetcher implements Agent {
     public void handleStart(Map<String, String[]> params) {
         crawlerThread = null;
         url = params.getOrDefault("site", new String[] {"www.google.com"})[0];
+        if (! url.startsWith("https://")) {
+            url = "https://" + url;
+        }
         System.out.println("Starting fetcher for site: " + url);
         crawlerThread = new Thread(new Crawler(url, "stan"));
         crawlerThread.start();

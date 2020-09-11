@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Spider
 {
-  private static final int MAX_PAGES_TO_SEARCH = 10;
+  private static final int MAX_PAGES_TO_SEARCH = 100;
   private Set<String> pagesVisited = new HashSet<String>();
   private List<String> pagesToVisit = new LinkedList<String>();
 
@@ -42,7 +42,6 @@ public class Spider
           if(success)
           {
               System.out.println(String.format("**Success** Word %s found at %s", searchWord, currentUrl));
-              break;
           }
           this.pagesToVisit.addAll(leg.getLinks());
       }
