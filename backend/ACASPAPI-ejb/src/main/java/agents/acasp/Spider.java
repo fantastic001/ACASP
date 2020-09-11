@@ -1,5 +1,7 @@
 package agents.acasp;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +12,16 @@ public class Spider
   private static final int MAX_PAGES_TO_SEARCH = 100;
   private Set<String> pagesVisited = new HashSet<String>();
   private List<String> pagesToVisit = new LinkedList<String>();
+  private Collection<FoundPageListener> listeners;
 
+
+  public Spider() {
+      listeners = new ArrayList<>();
+  }
+
+  public void addListener(FoundPageListener listener) {
+      listeners.add(listener);
+  }
 
   /**
    * Our main launching point for the Spider's functionality. Internally it creates spider legs
@@ -38,10 +49,13 @@ public class Spider
           }
           leg.crawl(currentUrl); // Lots of stuff happening here. Look at the crawl method in
                                  // SpiderLeg
-          boolean success = leg.searchForWord(searchWord);
-          if(success)
+          String text = leg.searchForWord(searchWord);
+          if(text != null)
           {
               System.out.println(String.format("**Success** Word %s found at %s", searchWord, currentUrl));
+              for (FoundPageListener listener : listeners) {
+                  listener.onPage(text);
+              }
           }
           this.pagesToVisit.addAll(leg.getLinks());
       }

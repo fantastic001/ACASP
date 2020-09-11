@@ -68,17 +68,20 @@ public class SpiderLeg
      *            - The word or string to look for
      * @return whether or not the word was found
      */
-    public boolean searchForWord(String searchWord)
+    public String searchForWord(String searchWord)
     {
         // Defensive coding. This method should only be used after a successful crawl.
         if(this.htmlDocument == null)
         {
             System.out.println("ERROR! Call crawl() before performing analysis on the document");
-            return false;
+            return null;
         }
         System.out.println("Searching for the word " + searchWord + "...");
         String bodyText = this.htmlDocument.body().text();
-        return bodyText.toLowerCase().contains(searchWord.toLowerCase());
+        if (bodyText.toLowerCase().contains(searchWord.toLowerCase())) {
+            return bodyText;
+        }
+        else return null;
     }
 
 

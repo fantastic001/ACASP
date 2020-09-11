@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -35,15 +36,13 @@ import javax.ejb.DependsOn;
 @Startup
 @Singleton
 @LocalBean
-public class Fetcher implements Agent {
+public class Fetcher implements Agent, FoundPageListener {
     
     private MessageManager messageManager;
-
     private Thread crawlerThread;
-
     private String id; 
-
-    private String url; 
+    private String url;
+    private Crawler crawler; 
 
     private String getRandomAgentName() {
         int leftLimit = 97; // letter 'a'
@@ -66,69 +65,7 @@ public class Fetcher implements Agent {
 
     @Override
     public void handleMessage(ACLMessage msg) {
-        ArrayList<AID> masters = new ArrayList<>();
-        masters.add(new AID("", "", new AgentType("master", "stefan.agents.acasp")));
-        if (! msg.getSender().getType().getFullName().equals("stefan.agents.acasp.master")) {
-            return;
-        }
-        switch (msg.getPerformative()) {
-            case START: // master sends initial request
-                
-                break;
-            case ACCEPT: // contractor is willing to fullfil request 
-                break;
-            case SUCCESS: // task done 
-                break; 
-            case ERROR: // task is not done, choose new contractor 
-                break;
-			case DEFAULT:
-				break;
-			case REJECT:
-				break;
-            case REQUEST:
-                if (crawlerThread != null) {
-                    messageManager.post(new ACLMessage(
-                        Performative.ACCEPT, 
-                        this.getId(), 
-                        masters, 
-                        null, 
-                        id,
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null
-                    ));
-                }
-                else {
-                    messageManager.post(new ACLMessage(
-                        Performative.REJECT, 
-                        this.getId(), 
-                        masters, 
-                        null, 
-                        id, 
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null, 
-                        null
-                    ));
-                }
-				break;
-			default:
-				break;
 
-        }
     }
 
     @EJB
@@ -142,7 +79,9 @@ public class Fetcher implements Agent {
             url = "https://" + url;
         }
         System.out.println("Starting fetcher for site: " + url);
-        crawlerThread = new Thread(new Crawler(url, "stan"));
+        crawler = new Crawler(url, "stan");
+        crawler.addListener(this);
+        crawlerThread = new Thread(crawler);
         crawlerThread.start();
     }
 
@@ -160,5 +99,31 @@ public class Fetcher implements Agent {
     @Override
     public void deinit() {
 
+    }
+
+    @Override
+    public void onPage(String text) {
+        List<AID> receivers = AgentManager.getInstance().getAllOnlineAgents()
+            .stream()
+            .map(x -> x.getId())
+            .filter(x -> x.getType().getFullName().equals("stefan.agents.acasp.processor"))
+            .collect(Collectors.toList());
+        messageManager.post(new ACLMessage(
+                        Performative.ACCEPT, 
+                        this.getId(), 
+                        receivers, 
+                        null, 
+                        text,
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null
+                    ));
     }
 }
