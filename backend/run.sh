@@ -4,6 +4,7 @@ THIS_DIR=$(readlink -f $(dirname $0))
 
 TARGET_PATH="$THIS_DIR/target"
 
+mkdir -p $THIS_DIR/data
 
 docker run \
     --hostname api.atacasp \
