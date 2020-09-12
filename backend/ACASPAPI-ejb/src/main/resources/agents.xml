@@ -6,5 +6,6 @@
 <agent type="agents.contractnet.Contractor" />
 <agent type="agents.acasp.Fetcher" />
 <agent type="agents.acasp.Processor" />
+<agent type="agents.acasp.Master" />
 
 </agents>

@@ -21,6 +21,7 @@ import com.stefan.data.ACLMessage;
 import com.stefan.data.AID;
 import com.stefan.data.Agent;
 import com.stefan.data.AgentType;
+import com.stefan.data.Performative;
 import com.stefan.message.MessageManager;
 import com.stefan.message.MessageManagerBean;
 import javax.ejb.Local;
@@ -49,6 +50,29 @@ public class Processor implements Agent {
         }
         if (matched) {
             System.out.println("Found match in processor");
+            List<AID> receivers = AgentManager.getInstance().getAllOnlineAgents()
+            .stream()
+            .map(x -> x.getId())
+            .filter(x -> x.getType().getFullName().equals("stefan.agents.acasp.master"))
+            .collect(Collectors.toList());
+            mmgr.post(new ACLMessage(
+                        Performative.DEFAULT,
+                        this.getId(), 
+                        receivers, 
+                        null, 
+                        msg.getContent(),
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null, 
+                        null
+                    )
+                );
         }
         
     }
