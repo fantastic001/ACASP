@@ -17,6 +17,8 @@ mkdir -p "$TARGET_PATH-worker-$NODE_ID"
 cp $TARGET_PATH/*.ear "$TARGET_PATH-worker-$NODE_ID"
 
 
+mkdir -p  $THIS_DIR/data-$NODE_BIND_PORT
+
 NODE_ALIAS=$NODE_HOSTNAME
 echo "Bind port: $NODE_BIND_PORT"
 docker run --rm \
@@ -29,7 +31,7 @@ docker run --rm \
     -v "$TARGET_PATH-worker-$NODE_ID":/opt/jboss/wildfly/standalone/deployments/ \
     -p $NODE_BIND_PORT:8080 \
     -v $THIS_DIR/standalone-full-ha.xml:/opt/jboss/wildfly/standalone/configuration/standalone-full-ha.xml \
-    -v $THIS_DIR/data:/opt/data/ \
+    -v $THIS_DIR/data-$NODE_BIND_PORT:/opt/data/ \
     -it \
     -v $THIS_DIR/bin/:/usr/local/bin/ \
     jboss/wildfly:18.0.1.Final /usr/local/bin/init.sh
