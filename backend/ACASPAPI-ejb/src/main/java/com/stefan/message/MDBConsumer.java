@@ -12,6 +12,7 @@ import javax.jms.ObjectMessage;
 import javax.xml.registry.FindQualifier;
 
 import com.stefan.agent.AgentManager;
+import com.stefan.agent.LoginListener;
 import com.stefan.data.ACLMessage;
 import com.stefan.data.AID;
 import com.stefan.data.Agent;
@@ -47,6 +48,9 @@ public class MDBConsumer implements MessageListener {
 		Optional<RunningAgent> agent = AgentManager.getInstance().getOnlineAgents().stream().filter(a -> a.getAgent().getId().equals(aid)).findFirst();
 		if (agent.isPresent()) {
 			// System.out.println("Agent found: " + agent.get().getName());
+			for (LoginListener listener : AgentManager.getInstance().getLoginListeners()) {
+				listener.messageSent(msg);
+			}
 			agent.get().getAgent().handleMessage(msg);
 		} else {
 			// System.out.println("No such agent: " + aid.getName());

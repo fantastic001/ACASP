@@ -2,6 +2,7 @@
 import RunningAgentService from "./service";
 import RunningAgent from "./RunningAgent.vue";
 
+import { WS_URL } from "./../../../config";
 
 export default {
     name: "multi-RunningAgent",
@@ -19,6 +20,22 @@ export default {
     mounted: function () 
     {
         RunningAgentService.list().then(response => this.items = response.data);
+        // Create WebSocket connection.
+        this.socket = new WebSocket(WS_URL + '/websocket/');
+        this.socket.component = this;
+        // Connection opened
+        this.socket.addEventListener('open', function (event) {
+            socket.send('Hello Server!');
+        });
+        // Listen for messages
+        this.socket.addEventListener('message', function (event) {
+            console.log('Message from server ', event.data);
+            if (event.data.startsWith("LOGIN") || event.data.startsWith("LOGOUT")) {
+                console.log("reloading...");
+                this.component.reload();
+            }
+        });
+
     },
     methods: {
         reload: function () {

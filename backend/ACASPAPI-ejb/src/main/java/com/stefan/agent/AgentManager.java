@@ -112,6 +112,10 @@ public class AgentManager {
         this.loginListeners.add(listener);
     }
 
+    public Collection<LoginListener> getLoginListeners() {
+        return loginListeners;
+    }
+
     public void setAllOnlineAgents(Collection<RunningAgent> agents) {
         for (RunningAgent a : agents) System.out.println(a.getName());
         allOnlineAgents = agents;
