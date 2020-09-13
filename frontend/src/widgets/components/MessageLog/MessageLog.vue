@@ -19,7 +19,8 @@ export default {
         this.socket.addEventListener('message', function (event) {
             console.log('Message from server ', event.data);
             if (event.data.startsWith("MSG")) {
-                this.component.data.push(event.data);
+                var log = event.data;
+                this.component.data.push(log);
             }
         });
 
@@ -29,7 +30,9 @@ export default {
 
 <template>
     <div class="widget-MessageLog"> 
-        <p v-for="msg in this.data" :key="msg.replace(/ /g, '_') + Math.random()" :id="msg.replace(/ /g, ' ') + Math.random()">{{msg}}</p>
+        <p v-for="msg in this.data" :key="msg.replace(/ /g, '_') + Math.random()" :id="msg.replace(/ /g, ' ') + Math.random()">
+            {{msg.substring(0, 100)}}
+        </p>
     </div>
 
 </template>
