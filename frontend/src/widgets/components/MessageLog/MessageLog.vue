@@ -31,7 +31,7 @@ export default {
 <template>
     <div class="widget-MessageLog"> 
         <p v-for="msg in this.data" :key="msg.replace(/ /g, '_') + Math.random()" :id="msg.replace(/ /g, ' ') + Math.random()">
-            {{msg.substring(0, 100)}}
+            {{msg.substring(0, 300)}}
         </p>
     </div>
 

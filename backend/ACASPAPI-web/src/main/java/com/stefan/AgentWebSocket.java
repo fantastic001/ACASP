@@ -14,6 +14,8 @@ import com.stefan.message.MessageManager;
 import com.stefan.data.ACLMessage;
 import javax.ejb.EJB;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ServerEndpoint("/websocket/")
 public class AgentWebSocket implements LoginListener {
@@ -51,7 +53,15 @@ public class AgentWebSocket implements LoginListener {
         System.out.println("WebSocket connection closed with CloseCode: " + reason.getCloseCode());
     }
     public void messageSent(ACLMessage msg) {
-        session.getAsyncRemote().sendText("MSG " + msg.getContent());
+        List<String> receivers = msg.getReceivers()
+            .stream()
+            .map(x -> x.getType().getFullName())
+            .collect(Collectors.toList());
+        session.getAsyncRemote().sendText(
+            "MSG from " + msg.getSender().getType().getFullName() + " to " 
+            + String.join(", ", receivers)
+            + ": " + msg.getContent() 
+        );
     }
 
 }
